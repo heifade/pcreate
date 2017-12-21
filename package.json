@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta10",
+  "version": "1.0.0-beta11",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -38,7 +38,9 @@
   "author": "heifade",
   "license": "MIT",
   "dependencies": {
-    "inquirer": "^4.0.1"
+    "inquirer": "^4.0.1",
+    "fs-extra": "^5.0.0",
+    "fs-i": "^1.0.0-beta5"
   },
   "devDependencies": {
     "@types/chai": "^4.0.5",
@@ -47,8 +49,6 @@
     "@types/mysql": "^2.15.1",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
-    "fs-extra": "^5.0.0",
-    "fs-i": "^1.0.0-beta5",
     "mocha": "^4.0.1",
     "nyc": "^11.3.0",
     "source-map-support": "^0.5.0",
