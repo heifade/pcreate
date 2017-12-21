@@ -4,18 +4,26 @@ import { Answer } from "./model/answer";
 
 let questionList = [
   {
-    type: "list",
-    name: "unittest",
-    message: "是否需要创建单元测试？",
-    default: "是",
-    choices: ["是", "否"]
-  },
-  {
     name: "projectName",
     type: "input",
     message: "请输入项目名称",
     default: "project1"
-  }
+  },
+  {
+    name: "needDocs",
+    type: "list",
+    message: "是否需要有开发文档",
+    default: "否",
+    choices: ["是", "否"]
+  },
+  {
+    name: "unittest",
+    type: "list",
+    message: "是否需要创建单元测试？",
+    default: "是",
+    choices: ["是", "否"]
+  },
+  
 ];
 
 async function getQuestionAnswers() {
