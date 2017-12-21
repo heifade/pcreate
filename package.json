@@ -1,0 +1,24 @@
+{
+  "name": "pcreate",
+  "version": "1.0.0-beta1",
+  "description": "",
+  "main": "./es/index.js",
+  "module": "./es/index.js",
+  "typings": "./es/index",
+  "files": [
+    "es"
+  ],
+  "devDependencies": {
+    "@types/node": "^8.5.2",
+    "typescript": "^2.6.1"
+  },
+  "scripts": {
+    "removeDist": "node ./tools/deleteOutPath.js",
+    "tsBuild": "tsc -p tsconfig.json",
+    "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/replaceDocFileUnderline.js",
+    "build": "npm run removeDist && npm run tsBuild && npm run docs"
+  },
+  "keywords": [],
+  "author": "heifade",
+  "license": "MIT"
+}
