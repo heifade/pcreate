@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta8",
+  "version": "1.0.0-beta9",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -30,10 +30,10 @@
     "typescript": "^2.6.1"
   },
   "scripts": {
-    "removeDist": "node ./tools/deleteOutPath.js",
+    "clean": "node ./tools/deleteOutPath.js",
     "tsBuild": "tsc -p tsconfig.json && node ./tools/copy.js",
     "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/replaceDocFileUnderline.js",
-    "build": "npm run removeDist && npm run tsBuild",
+    "build": "npm run clean && npm run tsBuild && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "start": "npm run build && node ./es/index.js"
