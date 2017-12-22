@@ -49,7 +49,7 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
       delete json.scripts["test-nyc"];
       delete json.nyc;
 
-      json.scripts.build = json.scripts.build.replace(/\s*&&\s*npm\s*run\s*docs\s*/, "");
+      
       fileContent = JSON.stringify(json, null, 2);
     }
   }
