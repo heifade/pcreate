@@ -1,5 +1,5 @@
 export class Answer {
-  public unittest: boolean;
+  public unittest: string;
   public projectName: string;
-  public needDocs: boolean;
+  public needDocs: string;
 }

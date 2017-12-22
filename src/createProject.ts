@@ -9,22 +9,44 @@ async function replaceProjectName(path: string, answer: Answer) {
     let fileContent = readFileSync(file, { encoding: "utf-8" });
     fileContent = fileContent.replace(/{{projectName}}/g, answer.projectName);
 
-    fileContent = await needDocs(file, fileContent, answer);
+    fileContent = await editPackageJson(file, fileContent, answer);
 
     writeFileSync(file, fileContent);
   }
 }
 
-async function needDocs(file: string, fileContent: string, answer: Answer) {
-  if (!answer.needDocs) {
-    file = file.replace(/\\/g, "/");
-    file = file.substr(file.lastIndexOf("/"));
-    if (file === "package.json") {
+async function editPackageJson(file: string, fileContent: string, answer: Answer) {
+  file = file.replace(/\\/g, "/");
+  file = file.substr(file.lastIndexOf("/") + 1);
+
+  if (file === "package.json") {
+    if (answer.needDocs === "否") {
       let json = JSON.parse(fileContent);
       delete json.devDependencies.typedoc;
       delete json.scripts.docs;
+      json.scripts.build = json.scripts.build.replace(/\s*&&\s*npm\s*run\s*docs\s*/, "");
+      fileContent = JSON.stringify(json, null, 2);
+    }
+
+    if (answer.unittest === "否") {
+      let json = JSON.parse(fileContent);
+      delete json.devDependencies["@types/chai"];
+      delete json.devDependencies["@types/mocha"];
+      delete json.devDependencies["source-map-support"];
+      delete json.devDependencies["ts-node"];
+      delete json.devDependencies.chai;
+      delete json.devDependencies.coveralls;
+      delete json.devDependencies.mocha;
+      delete json.devDependencies.nyc;
+      delete json.scripts.test;
+      delete json.scripts["test-nyc"];
+      delete json.nyc;
+
+      json.scripts.build = json.scripts.build.replace(/\s*&&\s*npm\s*run\s*docs\s*/, "");
+      fileContent = JSON.stringify(json, null, 2);
     }
   }
+
   return fileContent;
 }
 
@@ -36,7 +58,7 @@ export async function createProjectWithUnitTest(answer: Answer) {
 }
 
 export async function createProject(answer: Answer) {
-  if (answer.unittest) {
-    createProjectWithUnitTest(answer);
-  }
+  // if (answer.unittest) {
+  createProjectWithUnitTest(answer);
+  // }
 }

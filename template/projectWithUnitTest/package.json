@@ -14,7 +14,6 @@
   "devDependencies": {
     "@types/chai": "^4.0.5",
     "@types/mocha": "^2.2.44",
-    "@types/mysql": "^2.15.1",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "mocha": "^4.0.1",
@@ -26,9 +25,9 @@
     "fs-extra": "^5.0.0"
   },
   "scripts": {
-    "clean": "node ./tools/deleteOutPath.js",
+    "clean": "node ./tools/clean.js",
     "tsBuild": "tsc -p tsconfig.json",
-    "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/replaceDocFileUnderline.js",
+    "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
     "build": "npm run clean && npm run tsBuild && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
