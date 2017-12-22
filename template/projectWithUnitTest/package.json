@@ -8,8 +8,8 @@
   "files": [
     "es"
   ],
-  "dependencies": {
-    
+  "bin": {
+    "{{projectName}}": "./es/bin/{{projectName}}"
   },
   "devDependencies": {
     "@types/chai": "^4.0.5",

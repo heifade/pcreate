@@ -1,6 +1,6 @@
 import { Answer } from "./model/answer";
 import { getAllFiles } from "fs-i";
-import { readFileSync, writeFileSync, copySync } from "fs-extra";
+import { readFileSync, writeFileSync, copySync, rmdirSync, emptyDirSync } from "fs-extra";
 
 async function replaceProjectName(path: string, answer: Answer) {
   let files = await getAllFiles(path);
@@ -12,6 +12,12 @@ async function replaceProjectName(path: string, answer: Answer) {
     fileContent = await editPackageJson(file, fileContent, answer);
 
     writeFileSync(file, fileContent);
+  }
+
+  if (answer.unittest === "否") {
+    let dir = path + "/test";
+    emptyDirSync(dir);
+    rmdirSync(dir);
   }
 }
 
@@ -34,6 +40,7 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
       delete json.devDependencies["@types/mocha"];
       delete json.devDependencies["source-map-support"];
       delete json.devDependencies["ts-node"];
+      delete json.devDependencies["typedoc-format"];
       delete json.devDependencies.chai;
       delete json.devDependencies.coveralls;
       delete json.devDependencies.mocha;
@@ -44,6 +51,17 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
 
       json.scripts.build = json.scripts.build.replace(/\s*&&\s*npm\s*run\s*docs\s*/, "");
       fileContent = JSON.stringify(json, null, 2);
+    }
+  }
+
+  if (file == ".travis.yml") {
+    if (answer.unittest === "否") {
+      fileContent = fileContent.replace(/(script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test)/, function(w, a, b, c, d) {
+        return w.replace(d, '');
+      });
+      fileContent = fileContent.replace(/(after_script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test-nyc)/, function(w, a, b, c, d) {
+        return w.replace(a, '').replace(d, '');
+      });
     }
   }
 

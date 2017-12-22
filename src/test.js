@@ -1,3 +1,5 @@
+let fileContent = `
+
 language: node_js
 sudo: enabled
 node_js:
@@ -26,4 +28,16 @@ deploy:
     local_dir: docs
     on:
       branch: master
+
+
+
+`
+
+fileContent = fileContent.replace(/(script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test)/, function(w, a, b, c, d) {
+  console.log(11, d);
+  return w.replace(d, '');
+});
+
+
+console.log(fileContent);
 
