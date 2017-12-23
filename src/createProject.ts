@@ -55,11 +55,14 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
 
   if (file == ".travis.yml") {
     if (answer.unittest === "否") {
-      fileContent = fileContent.replace(/(script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test)/, (w, a, b, c, d) => {
-        return w.replace(d, "");
-      }).replace(/(after_script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test-nyc)/, (w, a, b, c, d) => {
-        return w.replace(a, "").replace(d, "");
-      }).replace(/(-\s*provider:\s*pages\s*)([^-]*)/, '');
+      fileContent = fileContent
+        .replace(/(script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test)/, (w, a, b, c, d) => {
+          return w.replace(d, "");
+        })
+        .replace(/(after_script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test-nyc)/, (w, a, b, c, d) => {
+          return w.replace(a, "").replace(d, "");
+        })
+        .replace(/(-\s*provider:\s*pages\s*)([^-]*)/, "");
     }
   }
 
