@@ -1,3 +1,5 @@
+let fileContent = `
+
 language: node_js
 sudo: enabled
 node_js:
@@ -27,3 +29,21 @@ deploy:
     on:
       branch: master
 
+
+
+
+
+
+
+`;
+
+
+fileContent = fileContent.replace(/(script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test)/, (w, a, b, c, d) => {
+  return w.replace(d, "");
+});
+fileContent = fileContent.replace(/(after_script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test-nyc)/, (w, a, b, c, d) => {
+  return w.replace(a, "").replace(d, "");
+})
+fileContent = fileContent.replace(/(-\s*provider:\s*pages\s*)([^-]*)/, '');
+
+console.log(fileContent);
