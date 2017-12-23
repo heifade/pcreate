@@ -11,7 +11,7 @@
   ],
   "bin": {
     "pcreate": "./es/bin/pcreate",
-    "cp": "./es/bin/pcreate"
+    "pc": "./es/bin/pcreate"
   },
   "scripts": {
     "clean": "node ./tools/clean.js",
