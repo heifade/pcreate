@@ -49,7 +49,6 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
       delete json.scripts["test-nyc"];
       delete json.nyc;
 
-      
       fileContent = JSON.stringify(json, null, 2);
     }
   }
@@ -57,10 +56,10 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
   if (file == ".travis.yml") {
     if (answer.unittest === "否") {
       fileContent = fileContent.replace(/(script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test)/, function(w, a, b, c, d) {
-        return w.replace(d, '');
+        return w.replace(d, "");
       });
       fileContent = fileContent.replace(/(after_script\s*:)((.|\n)*?)(\s*-\s*npm\s*run\s*test-nyc)/, function(w, a, b, c, d) {
-        return w.replace(a, '').replace(d, '');
+        return w.replace(a, "").replace(d, "");
       });
     }
   }
