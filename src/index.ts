@@ -43,9 +43,11 @@ async function run() {
   await createProject(answer);
 
 
-  let subCmd = command("node", "node", (yargs: Argv) => {
+  let subCmd = command("pc-node", "node", (yargs: Argv) => {
     return yargs;
   }).argv;
+
+  
 
   
 }
