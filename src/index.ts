@@ -31,7 +31,7 @@ async function getQuestionAnswers() {
   for (let q of questionList) {
     let a = await prompt(q);
     let key = Reflect.ownKeys(a)[0];
-    let value = Reflect.get(a, key);    
+    let value = Reflect.get(a, key);
     Reflect.set(answer, key, value);
   }
   return answer;
@@ -44,3 +44,7 @@ getQuestionAnswers()
   .catch(err => {
     console.log(err);
   });
+
+process.on("SIGINT", function() {
+  process.exit(0);
+});
