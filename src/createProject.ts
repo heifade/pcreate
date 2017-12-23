@@ -67,15 +67,8 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
   return fileContent;
 }
 
-export async function createProjectWithUnitTest(answer: Answer) {
-  let targetPath = `${process.cwd()}/${answer.projectName}`;
-  copySync(`${__dirname}/../template/projectWithUnitTest`, targetPath);
-
-  replaceProjectName(targetPath, answer);
-}
-
 export async function createProject(answer: Answer) {
-  // if (answer.unittest) {
-  createProjectWithUnitTest(answer);
-  // }
+  let targetPath = `${process.cwd()}/${answer.projectName}`;
+  copySync(`${__dirname}/../template`, targetPath);
+  replaceProjectName(targetPath, answer);
 }
