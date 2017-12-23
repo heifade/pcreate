@@ -1,13 +1,12 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta23",
+  "version": "1.0.0-beta24",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
   "typings": "./es/index",
   "files": [
-    "es",
-    "template"
+    "es"
   ],
   "bin": {
     "pcreate": "./es/bin/pcreate",

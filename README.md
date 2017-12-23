@@ -15,7 +15,7 @@ pcreate
 
 # 安装
 ```bash
-npm install pcreate
+npm install pcreate -g
 ```
 
 # 介绍
