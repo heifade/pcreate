@@ -46,9 +46,9 @@ async function run() {
   await createProject(answer);
 
 
-  let y = await subCommand();
+  // let y = await subCommand();
 
-  console.log(11, y);
+  // console.log(11, y);
 
   
 
