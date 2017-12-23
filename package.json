@@ -10,7 +10,8 @@
     "template"
   ],
   "bin": {
-    "pcreate": "./es/bin/pcreate"
+    "pcreate": "./es/bin/pcreate",
+    "cp": "./es/bin/pcreate"
   },
   "scripts": {
     "clean": "node ./tools/clean.js",
