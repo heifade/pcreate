@@ -72,5 +72,5 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
 export async function createProject(answer: Answer) {
   let targetPath = `${process.cwd()}/${answer.projectName}`;
   copySync(`${__dirname}/../template`, targetPath);
-  replaceProjectName(targetPath, answer);
+  await replaceProjectName(targetPath, answer);
 }

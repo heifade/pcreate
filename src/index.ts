@@ -1,3 +1,4 @@
+import { command, Argv } from "yargs";
 import { prompt } from "inquirer";
 import { createProject } from "./createProject";
 import { Answer } from "./model/answer";
@@ -37,9 +38,21 @@ async function getQuestionAnswers() {
   return answer;
 }
 
-getQuestionAnswers()
-  .then(answer => {
-    createProject(answer);
+async function run() {
+  let answer = await getQuestionAnswers();
+  await createProject(answer);
+
+
+  let subCmd = command("node", "node", (yargs: Argv) => {
+    return yargs;
+  }).argv;
+
+  
+}
+
+run()
+  .then(() => {
+    
   })
   .catch(err => {
     console.log(err);
