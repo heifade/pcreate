@@ -2,7 +2,6 @@ import { command, Argv } from "yargs";
 import { prompt } from "inquirer";
 import { createProject } from "./createProject";
 import { Answer } from "./model/answer";
-import { subCommand } from './subCommand';
 
 let questionList = [
   {
@@ -45,10 +44,6 @@ async function run() {
   let answer = await getQuestionAnswers();
   await createProject(answer);
 
-
-  // let y = await subCommand();
-
-  // console.log(11, y);
 
   
 
