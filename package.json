@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta24",
+  "version": "1.0.0-beta25",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -41,7 +41,8 @@
     "fs-extra": "^5.0.0",
     "fs-i": "^1.0.0-beta5",
     "inquirer": "^4.0.1",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "zip-i": "^1.0.0-beta5"
   },
   "devDependencies": {
     "@types/chai": "^4.0.5",

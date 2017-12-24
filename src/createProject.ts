@@ -1,6 +1,7 @@
 import { Answer } from "./model/answer";
 import { getAllFiles } from "fs-i";
 import { readFileSync, writeFileSync, copySync, rmdirSync, emptyDirSync } from "fs-extra";
+import { unzipPath } from "zip-i";
 
 async function replaceProjectName(path: string, answer: Answer) {
   let files = await getAllFiles(path);
@@ -71,6 +72,6 @@ async function editPackageJson(file: string, fileContent: string, answer: Answer
 
 export async function createProject(answer: Answer) {
   let targetPath = `${process.cwd()}/${answer.projectName}`;
-  copySync(`${__dirname}/template`, targetPath);
+  unzipPath(`${__dirname}/template.zip`, targetPath);
   await replaceProjectName(targetPath, answer);
 }
