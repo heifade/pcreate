@@ -1,59 +1,24 @@
 import { command, Argv } from "yargs";
-import { prompt } from "inquirer";
-import { createProject } from "./createProject";
-import { Answer } from "./model/answer";
-
-let questionList = [
-  {
-    name: "projectName",
-    type: "input",
-    message: "请输入项目名称",
-    default: "project1"
-  },
-  {
-    name: "needDocs",
-    type: "list",
-    message: "是否需要有开发文档",
-    default: "否",
-    choices: ["是", "否"]
-  },
-  {
-    name: "unittest",
-    type: "list",
-    message: "是否需要创建单元测试？",
-    default: "否",
-    choices: ["是", "否"]
-  }
-];
-
-async function getQuestionAnswers() {
-  let answer = new Answer();
-
-  for (let q of questionList) {
-    let a = await prompt(q);
-    let key = Reflect.ownKeys(a)[0];
-    let value = Reflect.get(a, key);
-    Reflect.set(answer, key, value);
-  }
-  return answer;
-}
-
-
+import { prompt, Questions } from "inquirer";
+import { NodeProj } from "./projects/nodeProj";
+import { MainProj } from "./projects/mainProj";
+import { Angular2Proj } from "./projects/angular2Proj";
 
 async function run() {
-  let answer = await getQuestionAnswers();
-  await createProject(answer);
-
 
   
 
-  
+  let mainProj = new MainProj();
+  let nodeProj = new NodeProj();
+  let angular2Proj = new Angular2Proj();
+
+  await mainProj.run();
+  await nodeProj.run();
+  await angular2Proj.run();
 }
 
 run()
-  .then(() => {
-    
-  })
+  .then(() => {})
   .catch(err => {
     console.log(err);
   });

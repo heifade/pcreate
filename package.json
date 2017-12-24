@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta28",
+  "version": "1.0.0-beta29",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -39,7 +39,7 @@
   "license": "MIT",
   "dependencies": {
     "fs-extra": "^5.0.0",
-    "fs-i": "^1.0.0-beta16",
+    "fs-i": "^1.0.0-beta21",
     "inquirer": "^4.0.1",
     "yargs": "^10.0.3",
     "zip-i": "^1.0.0-beta5"
