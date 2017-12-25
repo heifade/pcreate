@@ -18,6 +18,7 @@
   "scripts": {
     "clean": "node ./tools/clean.js",
     "tsBuild": "tsc -p tsconfig.json",
+    "build": "npm run clean && npm run tsBuild",
     "start": "npm run build && node ./es/index.js"
   },
   "keywords": [
