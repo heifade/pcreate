@@ -18,7 +18,7 @@ async function run(params) {
     let targetPath = `${rootPath}/es/template`;
     targetFile = `${targetPath}/${targetFile}.zip`;
 
-    await fsi.mkdir(targetPath);
+    await fsi.mkdirs(targetPath);
     await zipi.zipPath(subPath, targetFile);
   }
 }

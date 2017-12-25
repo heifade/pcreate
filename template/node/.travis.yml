@@ -3,10 +3,8 @@ sudo: enabled
 node_js:
   - "8"
 script:
-  - npm run test
   - npm run build
-after_script:
-  - npm run test-nyc
+
 
 cache:
   directories:
@@ -20,10 +18,5 @@ deploy:
     on:
       branch: master
       repo: heifade/{{projectName}}
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    local_dir: docs
-    on:
-      branch: master
+
 

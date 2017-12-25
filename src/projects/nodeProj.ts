@@ -1,6 +1,6 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
-import { mkdir } from "fs-i";
+import { mkdirs } from "fs-i";
 import { writeFileSync, readFileSync } from "fs-extra";
 import { GlobalData } from "../model/globalData";
 
@@ -31,17 +31,26 @@ export class NodeProj extends BaseProj {
     if (answer.unittest === "是") {
       let projPath = `${process.cwd()}/${GlobalData.projectName}`;
       let testPath = `${projPath}/test`;
-      mkdir(testPath);
+      await mkdirs(testPath);
 
-      writeFileSync(`${testPath}/mocha.opts`, `
+      await this.editPackageJson(projPath, answer);
+      await this.editTravis(projPath, answer);
+
+      await writeFileSync(
+        `${testPath}/mocha.opts`,
+        `
 --require ts-node/register
 --require source-map-support/register
 --full-trace
 --bail
 test/**/*.test.ts
-      `.trim(), { encoding: "utf8" });
+      `.trim(),
+        { encoding: "utf8" }
+      );
 
-      writeFileSync(`${testPath}/test.test.ts`, `
+      await writeFileSync(
+        `${testPath}/test.test.ts`,
+        `
 import { expect } from "chai";
 import "mocha";
 
@@ -53,15 +62,30 @@ describe("test", function() {
     expect(1).to.equal(1);
   });
 });   
-      `.trim(), { encoding: "utf8" });
+      `.trim(),
+        { encoding: "utf8" }
+      );
+    }
+  }
 
+  private async editPackageJson(path: string, answer: any) {
+    let file = `${path}/package.json`;
+    let fileContent = readFileSync(file, { encoding: "utf-8" });
 
-
-
-      let fileContent = readFileSync(`${testPath}/package.json`, { encoding: "utf-8" });
+    if (answer.needDocs === "是") {
       let json = JSON.parse(fileContent);
 
-      
+      json.devDependencies["typedoc"] = "^0.9.0";
+      json.devDependencies["typedoc-format"] = "^1.0.0-beta1";
+
+      json.scripts["docs"] = "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js";
+      json.scripts["build"] = "npm run clean && npm run tsBuild && npm run docs";
+      fileContent = JSON.stringify(json, null, 2);
+    }
+
+    if (answer.unittest === "是") {
+      let json = JSON.parse(fileContent);
+
       json.devDependencies["@types/chai"] = "^4.0.5";
       json.devDependencies["chai"] = "^4.1.2";
       json.devDependencies["@types/mocha"] = "^2.2.44";
@@ -72,20 +96,62 @@ describe("test", function() {
 
       json.devDependencies["source-map-support"] = "^0.5.0";
       json.devDependencies["ts-node"] = "^3.3.0";
-      json.devDependencies["typedoc-format"] = "^1.0.0-beta1";
-      
-      json.scripts.test
-      
-      
-      
-      delete json.scripts.test;
-      delete json.scripts["test-nyc"];
-      delete json.nyc;
+
+      json.scripts["test"] = "nyc mocha -t 5000";
+      json.scripts["test-nyc"] = "nyc npm test && nyc report --reporter=text-lcov | coveralls";
+
+      json["nyc"] = {
+        include: ["src/**/*.ts"],
+        extension: [".ts"],
+        require: ["ts-node/register"],
+        sourceMap: true,
+        instrument: true
+      };
 
       fileContent = JSON.stringify(json, null, 2);
-
-
-
     }
+
+    await writeFileSync(file, fileContent);
+  }
+
+  private async editTravis(path: string, answer: any) {
+    let file = `${path}/.travis.yml`;
+    let fileContent = readFileSync(file, { encoding: "utf-8" });
+
+    if (answer.unittest === "是") {
+      fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
+        return w + `
+  - npm run test`;
+      });
+
+      if (fileContent.match(/after_script\s*:/)) {
+        fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
+          return w + `
+  - npm run test-nyc`;
+        });
+      } else {
+        fileContent = fileContent.replace(/script\s*:/, (w, a,b,c,d) =>{
+          return `
+after_script:
+  - npm run test-nyc
+` + w;
+        });
+      }
+
+      fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
+        return (
+          w + `
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: docs
+    on:
+      branch: master
+`
+        );
+      });
+    }
+
+    await writeFileSync(file, fileContent);
   }
 }
