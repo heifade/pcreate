@@ -1,6 +1,6 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
-import { mkdirs } from "fs-i";
+import { mkdirs, readFileUtf8 } from "fs-i";
 import { writeFileSync, readFileSync } from "fs-extra";
 import { GlobalData } from "../model/globalData";
 
@@ -43,7 +43,7 @@ export class NodeProj extends BaseProj {
     // package.json
     {
       let file = `${path}/package.json`;
-      let fileContent = readFileSync(file, { encoding: "utf-8" });
+      let fileContent = await readFileUtf8(file);
       let json = JSON.parse(fileContent);
 
       json.devDependencies["typedoc"] = "^0.9.0";
@@ -59,7 +59,7 @@ export class NodeProj extends BaseProj {
     // package.json
     {
       let file = `${path}/package.json`;
-      let fileContent = readFileSync(file, { encoding: "utf-8" });
+      let fileContent = await readFileUtf8(file);
       let json = JSON.parse(fileContent);
 
       json.devDependencies["@types/chai"] = "^4.0.5";
@@ -92,7 +92,7 @@ export class NodeProj extends BaseProj {
     // .travis.yml
     {
       let file = `${path}/.travis.yml`;
-      let fileContent = readFileSync(file, { encoding: "utf-8" });
+      let fileContent = await readFileUtf8(file);
 
       fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
         return (
@@ -139,18 +139,17 @@ export class NodeProj extends BaseProj {
 --full-trace
 --bail
 test/**/*.test.ts
-      `.trim(),
-        { encoding: "utf8" }
+      `.trim()
       );
 
       await writeFileSync(
-        `${testPath}/test.test.ts`,
+        `${testPath}/index.test.ts`,
         `
 import { expect } from "chai";
 import "mocha";
 import { add } from "../src/index";
 
-describe("test", function() {
+describe("index", function() {
   before(async () => {});
   after(async () => {});
 
@@ -158,8 +157,7 @@ describe("test", function() {
     expect(add(1, 2)).to.equal(3);
   });
 });   
-      `.trim(),
-        { encoding: "utf8" }
+      `.trim()
       );
     }
   }

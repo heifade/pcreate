@@ -3,6 +3,7 @@
 /node_modules
 /es
 /docs
+/lib
 /.nyc_output
 .DS_Store
 npm-debug.log*

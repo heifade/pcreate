@@ -1,7 +1,7 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
 import { unzipPath } from "zip-i";
-import { getAllFiles, mkdirs, rmdir } from "fs-i";
+import { getAllFiles, mkdirs, rmdir, readFileUtf8 } from "fs-i";
 import { readFileSync, writeFileSync, copySync, rmdirSync, emptyDirSync } from "fs-extra";
 import * as path from "path";
 import { GlobalData } from "../model/globalData";
@@ -45,7 +45,7 @@ export class MainProj extends BaseProj {
     let files = await getAllFiles(path);
 
     for (let file of files) {
-      let fileContent = readFileSync(file, { encoding: "utf-8" });
+      let fileContent = await readFileUtf8(file);
       fileContent = fileContent.replace(/{{projectName}}/g, answer.projectName);
       writeFileSync(file, fileContent);
     }

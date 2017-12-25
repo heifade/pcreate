@@ -1,5 +1,3 @@
-// 删除dist目录
-
 let fs = require("fs-i");
 
 fs.rmdir("./es");
