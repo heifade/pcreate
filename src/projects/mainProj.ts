@@ -38,7 +38,6 @@ export class MainProj extends BaseProj {
     await mkdirs(targetPath);
     await unzipPath(templateZipFile, targetPath);
     await this.replaceProjectName(targetPath, answer);
-    
   }
 
   private async replaceProjectName(path: string, answer: any) {
@@ -50,6 +49,4 @@ export class MainProj extends BaseProj {
       writeFileSync(file, fileContent);
     }
   }
-
-  
 }
