@@ -28,13 +28,108 @@ export class NodeProj extends BaseProj {
   async run() {
     let answer = await this.getAnswers();
 
-    if (answer.unittest === "是") {
-      let projPath = `${process.cwd()}/${GlobalData.projectName}`;
-      let testPath = `${projPath}/test`;
-      await mkdirs(testPath);
+    let projPath = `${process.cwd()}/${GlobalData.projectName}`;
 
-      await this.editPackageJson(projPath, answer);
-      await this.editTravis(projPath, answer);
+    if (answer.needDocs === "是") {
+      this.addDocs(projPath);
+    }
+
+    if (answer.unittest === "是") {
+      this.addUnitTest(projPath);
+    }
+  }
+
+  private async addDocs(path: string) {
+    // package.json
+    {
+      let file = `${path}/package.json`;
+      let fileContent = readFileSync(file, { encoding: "utf-8" });
+      let json = JSON.parse(fileContent);
+
+      json.devDependencies["typedoc"] = "^0.9.0";
+      json.devDependencies["typedoc-format"] = "^1.0.0-beta1";
+
+      json.scripts["docs"] = "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js";
+      json.scripts["build"] = "npm run clean && npm run tsBuild && npm run docs";
+      fileContent = JSON.stringify(json, null, 2);
+      await writeFileSync(file, fileContent);
+    }
+  }
+  private async addUnitTest(path: string) {
+    // package.json
+    {
+      let file = `${path}/package.json`;
+      let fileContent = readFileSync(file, { encoding: "utf-8" });
+      let json = JSON.parse(fileContent);
+
+      json.devDependencies["@types/chai"] = "^4.0.5";
+      json.devDependencies["chai"] = "^4.1.2";
+      json.devDependencies["@types/mocha"] = "^2.2.44";
+      json.devDependencies["mocha"] = "^4.0.1";
+
+      json.devDependencies["coveralls"] = "^3.0.0";
+      json.devDependencies["nyc"] = "^11.3.0";
+
+      json.devDependencies["source-map-support"] = "^0.5.0";
+      json.devDependencies["ts-node"] = "^3.3.0";
+
+      json.scripts["test"] = "nyc mocha -t 5000";
+      json.scripts["test-nyc"] = "nyc npm test && nyc report --reporter=text-lcov | coveralls";
+
+      json["nyc"] = {
+        include: ["src/**/*.ts"],
+        extension: [".ts"],
+        require: ["ts-node/register"],
+        sourceMap: true,
+        instrument: true
+      };
+
+      fileContent = JSON.stringify(json, null, 2);
+
+      await writeFileSync(file, fileContent);
+    }
+
+    // .travis.yml
+    {
+      let file = `${path}/.travis.yml`;
+      let fileContent = readFileSync(file, { encoding: "utf-8" });
+
+      fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
+        return (
+          w +
+          `
+  - npm run test`
+        );
+      });
+
+      fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
+        return (
+          w +
+          `
+  - npm run test-nyc`
+        );
+      });
+
+      fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
+        return (
+          w +
+          `
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: docs
+    on:
+      branch: master
+`
+        );
+      });
+      await writeFileSync(file, fileContent);
+    }
+
+    // test js
+    {
+      let testPath = `${path}/test`;
+      await mkdirs(testPath);
 
       await writeFileSync(
         `${testPath}/mocha.opts`,
@@ -66,92 +161,5 @@ describe("test", function() {
         { encoding: "utf8" }
       );
     }
-  }
-
-  private async editPackageJson(path: string, answer: any) {
-    let file = `${path}/package.json`;
-    let fileContent = readFileSync(file, { encoding: "utf-8" });
-
-    if (answer.needDocs === "是") {
-      let json = JSON.parse(fileContent);
-
-      json.devDependencies["typedoc"] = "^0.9.0";
-      json.devDependencies["typedoc-format"] = "^1.0.0-beta1";
-
-      json.scripts["docs"] = "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js";
-      json.scripts["build"] = "npm run clean && npm run tsBuild && npm run docs";
-      fileContent = JSON.stringify(json, null, 2);
-    }
-
-    if (answer.unittest === "是") {
-      let json = JSON.parse(fileContent);
-
-      json.devDependencies["@types/chai"] = "^4.0.5";
-      json.devDependencies["chai"] = "^4.1.2";
-      json.devDependencies["@types/mocha"] = "^2.2.44";
-      json.devDependencies["mocha"] = "^4.0.1";
-
-      json.devDependencies["coveralls"] = "^3.0.0";
-      json.devDependencies["nyc"] = "^11.3.0";
-
-      json.devDependencies["source-map-support"] = "^0.5.0";
-      json.devDependencies["ts-node"] = "^3.3.0";
-
-      json.scripts["test"] = "nyc mocha -t 5000";
-      json.scripts["test-nyc"] = "nyc npm test && nyc report --reporter=text-lcov | coveralls";
-
-      json["nyc"] = {
-        include: ["src/**/*.ts"],
-        extension: [".ts"],
-        require: ["ts-node/register"],
-        sourceMap: true,
-        instrument: true
-      };
-
-      fileContent = JSON.stringify(json, null, 2);
-    }
-
-    await writeFileSync(file, fileContent);
-  }
-
-  private async editTravis(path: string, answer: any) {
-    let file = `${path}/.travis.yml`;
-    let fileContent = readFileSync(file, { encoding: "utf-8" });
-
-    if (answer.unittest === "是") {
-      fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
-        return w + `
-  - npm run test`;
-      });
-
-      if (fileContent.match(/after_script\s*:/)) {
-        fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
-          return w + `
-  - npm run test-nyc`;
-        });
-      } else {
-        fileContent = fileContent.replace(/script\s*:/, (w, a,b,c,d) =>{
-          return `
-after_script:
-  - npm run test-nyc
-` + w;
-        });
-      }
-
-      fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
-        return (
-          w + `
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    local_dir: docs
-    on:
-      branch: master
-`
-        );
-      });
-    }
-
-    await writeFileSync(file, fileContent);
   }
 }

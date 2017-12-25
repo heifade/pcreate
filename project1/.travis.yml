@@ -18,6 +18,6 @@ deploy:
     api_key: $NPM_TOKEN
     on:
       branch: master
-      repo: heifade/{{projectName}}
+      repo: heifade/project1
 
 
