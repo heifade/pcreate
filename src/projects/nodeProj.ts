@@ -148,13 +148,14 @@ test/**/*.test.ts
         `
 import { expect } from "chai";
 import "mocha";
+import { add } from "../src/index";
 
 describe("test", function() {
   before(async () => {});
   after(async () => {});
 
-  it("test should be success", async () => {
-    expect(1).to.equal(1);
+  it("add should be success", async () => {
+    expect(add(1, 2)).to.equal(3);
   });
 });   
       `.trim(),
