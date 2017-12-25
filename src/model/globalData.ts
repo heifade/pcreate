@@ -1,3 +1,5 @@
+import { ProjectType } from './ProjectType';
+
 export class GlobalData {
   private static get hash() {
     let key = "localData";
@@ -17,4 +19,13 @@ export class GlobalData {
   public static set projectName(name: string) {
     this.hash.projectName = name;
   }
+
+  public static get projectType(): ProjectType {
+    return this.hash.projectType;
+  }
+  public static set projectType(type: ProjectType) {
+    this.hash.projectType = type;
+  }
+
+
 }

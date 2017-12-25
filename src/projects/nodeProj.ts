@@ -47,7 +47,7 @@ export class NodeProj extends BaseProj {
       let json = JSON.parse(fileContent);
 
       json.devDependencies["typedoc"] = "^0.9.0";
-      json.devDependencies["typedoc-format"] = "^1.0.0-beta1";
+      json.devDependencies["typedoc-format"] = "^1.0.2";
 
       json.scripts["docs"] = "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js";
       json.scripts["build"] = "npm run clean && npm run tsBuild && npm run docs";

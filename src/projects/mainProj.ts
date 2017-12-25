@@ -5,6 +5,7 @@ import { getAllFiles, mkdirs, rmdir, readFileUtf8 } from "fs-i";
 import { readFileSync, writeFileSync, copySync, rmdirSync, emptyDirSync } from "fs-extra";
 import * as path from "path";
 import { GlobalData } from "../model/globalData";
+import { ProjectType, newProjectType } from "../model/ProjectType";
 
 export class MainProj extends BaseProj {
   getQuestions() {
@@ -30,6 +31,7 @@ export class MainProj extends BaseProj {
     let answer = await this.getAnswers();
 
     GlobalData.projectName = answer.projectName;
+    GlobalData.projectType = newProjectType(answer.projectType);
 
     let targetPath = `${process.cwd()}/${answer.projectName}`;
 

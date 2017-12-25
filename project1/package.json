@@ -1,0 +1,54 @@
+{
+  "name": "project1",
+  "version": "1.0.0-beta1",
+  "description": "project1",
+  "main": "./es/index.js",
+  "module": "./es/index.js",
+  "typings": "./es/index",
+  "files": [
+    "es"
+  ],
+  "bin": {
+    "project1": "./es/bin/project1"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "fs-extra": "^5.0.0",
+    "fs-i": "^1.0.4",
+    "@types/chai": "^4.0.5",
+    "chai": "^4.1.2",
+    "@types/mocha": "^2.2.44",
+    "mocha": "^4.0.1",
+    "coveralls": "^3.0.0",
+    "nyc": "^11.3.0",
+    "source-map-support": "^0.5.0",
+    "ts-node": "^3.3.0"
+  },
+  "dependencies": {},
+  "scripts": {
+    "clean": "node ./tools/clean.js",
+    "tsBuild": "tsc -p tsconfig.json",
+    "build": "npm run clean && npm run tsBuild",
+    "start": "npm run build && node ./es/index.js",
+    "test": "nyc mocha -t 5000",
+    "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+  },
+  "keywords": [
+    "project1"
+  ],
+  "author": "heifade",
+  "license": "MIT",
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  }
+}
