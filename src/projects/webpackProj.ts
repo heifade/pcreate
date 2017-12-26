@@ -3,7 +3,7 @@ import { Questions } from "inquirer";
 import { GlobalData } from "../model/globalData";
 import { writeFileSync } from "fs";
 import { ProjectType } from "../model/ProjectType";
-import { readFileUtf8 } from "fs-i/es";
+import { readFileUtf8 } from "fs-i";
 
 export class WebpackProj extends BaseProj {
   getQuestions() {
