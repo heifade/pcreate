@@ -71,7 +71,6 @@ export class NodeProj extends BaseProj {
       json.devDependencies["nyc"] = "^11.3.0";
 
       json.devDependencies["source-map-support"] = "^0.5.0";
-      json.devDependencies["ts-node"] = "^3.3.0";
 
       json.scripts["test"] = "nyc mocha -t 5000";
       json.scripts["test-nyc"] = "nyc npm test && nyc report --reporter=text-lcov | coveralls";
