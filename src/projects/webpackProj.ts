@@ -7,7 +7,6 @@ import { readFileUtf8 } from "fs-i/es";
 import * as path from "path";
 import { unzipPath } from "zip-i";
 
-
 export class WebpackProj extends BaseProj {
   getQuestions() {
     let questionList: Questions[] = [];
@@ -21,9 +20,8 @@ export class WebpackProj extends BaseProj {
 
     let projPath = `${process.cwd()}/${GlobalData.projectName}`;
 
-    let templateZipFile = path.join(__dirname, "..", "template/node.zip");
+    let templateZipFile = path.join(__dirname, "..", "template/webpack.zip");
     await unzipPath(templateZipFile, projPath);
-
 
     this.saveWebpackConfig(projPath);
     this.savePackage(projPath);
@@ -43,6 +41,9 @@ export class WebpackProj extends BaseProj {
     json.devDependencies["@types/webpack"] = "^3.8.1";
     json.devDependencies["webpack"] = "^3.10.0";
     json.devDependencies["ts-loader"] = "^3.2.0";
+    json.devDependencies["babel-core"] = "^6.26.0";
+    json.devDependencies["babel-loader"] = "^7.1.2";
+    json.devDependencies["babel-preset-es2015"] = "^6.24.1";
 
     json.scripts["tsBuild"] = "webpack";
 
