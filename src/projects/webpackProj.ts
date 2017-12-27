@@ -4,6 +4,8 @@ import { GlobalData } from "../model/globalData";
 import { writeFileSync } from "fs";
 import { ProjectType } from "../model/ProjectType";
 import { readFileUtf8 } from "fs-i/es";
+import * as path from "path";
+import { unzipPath } from "zip-i";
 
 export class WebpackProj extends BaseProj {
   getQuestions() {
@@ -17,40 +19,18 @@ export class WebpackProj extends BaseProj {
     }
 
     let projPath = `${process.cwd()}/${GlobalData.projectName}`;
+
+    let templateZipFile = path.join(__dirname, "..", "template/node.zip");
+    await unzipPath(templateZipFile, projPath);
+
+
     this.saveWebpackConfig(projPath);
     this.savePackage(projPath);
   }
 
   private async saveWebpackConfig(path: string) {
     let file = `${path}/webpack.config.ts`;
-    let fileContent = `
-    import * as webpack from "webpack";
-    import * as path from "path";
-    
-    let config: webpack.Configuration = {
-      entry: {
-        index: "./src/index.ts"
-      },
-      output: {
-        path: path.resolve(__dirname, "es"),
-        filename: "[name].js"
-      },
-      module: {
-        rules: [{ test: /\.ts$/, use: "ts-loader" }]
-      },
-      target: "node",
-      resolve: {
-        extensions: [".ts", ".js"]
-      },
-      externals: {
-        "fs-extra": "require('fs-extra')"
-      }
-    };
-    
-    export default config;
-    
-    
-    `;
+    let fileContent = await readFileUtf8(file);
     await writeFileSync(file, fileContent);
   }
 
