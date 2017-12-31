@@ -19,7 +19,7 @@
     "build": "npm run clean && npm run tsBuild && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && node ./es/index.js"
+    "start": "npm run build && node ./es/index.js --help"
   },
   "nyc": {
     "include": [

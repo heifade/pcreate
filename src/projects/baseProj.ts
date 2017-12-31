@@ -5,7 +5,7 @@ export abstract class BaseProj {
   abstract getQuestions(): Questions[];
   abstract run(): void;
 
-  async getAnswers() {
+  public async getAnswers() {
     let answer: any = {};
 
     let questionList = this.getQuestions();
