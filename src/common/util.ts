@@ -3,6 +3,12 @@ import { GlobalData } from "../model/globalData";
 import { readFileUtf8 } from "fs-i/es";
 import { writeFileSync } from "fs";
 
+/**
+ * 编辑package.json文件
+ * 
+ * @export
+ * @param {(json: any) => void} edit - 修改package.json里的对象json
+ */
 export async function editPackageJson(edit: (json: any) => void) {
   await editFile(path.join(GlobalData.projectRootPath, "package.json"), fileContent => {
     let json = JSON.parse(fileContent);
@@ -13,6 +19,13 @@ export async function editPackageJson(edit: (json: any) => void) {
   });
 }
 
+/**
+ * 编辑文件
+ * 
+ * @export
+ * @param {string} fileName - 文件名
+ * @param {(fileContent: string) => string} edit - 修改文件内容并返回
+ */
 export async function editFile(fileName: string, edit: (fileContent: string) => string) {
   let fileContent = await readFileUtf8(fileName);
 
