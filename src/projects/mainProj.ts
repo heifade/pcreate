@@ -1,11 +1,14 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
 import { unzipPath } from "zip-i";
-import { getAllFiles, mkdirs, rmdir, readFileUtf8 } from "fs-i";
-import { readFileSync, writeFileSync, copySync, rmdirSync, emptyDirSync } from "fs-extra";
+import { getAllFiles, mkdirs, rmdir } from "fs-i";
 import * as path from "path";
 import { GlobalData } from "../model/globalData";
 import { ProjectType, newProjectType } from "../model/ProjectType";
+import { AngularProj } from "./angularProj";
+import { WebpackProj } from "./webpackProj";
+import { NodeProj } from "./nodeProj";
+import { editFile } from "../common/util";
 
 export class MainProj extends BaseProj {
   getQuestions() {
@@ -21,7 +24,7 @@ export class MainProj extends BaseProj {
         type: "list",
         message: "请选择项目类型",
         default: "node",
-        choices: ["node", "webpack", "angular2"]
+        choices: ["node", "webpack", "angular"]
       }
     ];
 
@@ -33,22 +36,35 @@ export class MainProj extends BaseProj {
     GlobalData.projectName = answer.projectName;
     GlobalData.projectType = newProjectType(answer.projectType);
 
-    let targetPath = `${process.cwd()}/${answer.projectName}`;
+    GlobalData.projectRootPath = path.join(process.cwd(), answer.projectName);
+    await mkdirs(GlobalData.projectRootPath);
 
-    let templateZipFile = path.join(__dirname, "..", "template/node.zip");
+    let nodeProj = new NodeProj();
+    let angularProj = new AngularProj();
+    let webpackProj = new WebpackProj();
 
-    await mkdirs(targetPath);
-    await unzipPath(templateZipFile, targetPath);
-    await this.replaceProjectName(targetPath, answer);
+    switch (GlobalData.projectType) {
+      case ProjectType.node:
+        await nodeProj.run();
+        break;
+      case ProjectType.webpack:
+        await webpackProj.run();
+        break;
+      case ProjectType.angular:
+        await angularProj.run();
+        break;
+    }
+
+    await this.replaceProjectName();
   }
 
-  private async replaceProjectName(path: string, answer: any) {
-    let files = await getAllFiles(path);
+  private async replaceProjectName() {
+    let files = await getAllFiles(GlobalData.projectRootPath);
 
     for (let file of files) {
-      let fileContent = await readFileUtf8(file);
-      fileContent = fileContent.replace(/{{projectName}}/g, answer.projectName);
-      writeFileSync(file, fileContent);
+      await editFile(file, fileContent => {
+        return fileContent.replace(/{{projectName}}/g, GlobalData.projectName);
+      });
     }
   }
 }

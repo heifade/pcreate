@@ -1,7 +1,7 @@
 export enum ProjectType {
   node,
   webpack,
-  angular2
+  angular
 }
 
 export function newProjectType(typeName: string) {
@@ -10,7 +10,7 @@ export function newProjectType(typeName: string) {
       return ProjectType.node;
     case "webpack":
       return ProjectType.webpack;
-    case "angular2":
-      return ProjectType.angular2;
+    case "angular":
+      return ProjectType.angular;
   }
 }

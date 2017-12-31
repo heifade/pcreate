@@ -27,5 +27,12 @@ export class GlobalData {
     this.hash.projectType = type;
   }
 
+  public static get projectRootPath(): string {
+    return this.hash.projectRootPath;
+  }
+  public static set projectRootPath(path: string) {
+    this.hash.projectRootPath = path;
+  }
+
 
 }

@@ -1,8 +1,11 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
-import { mkdirs, readFileUtf8 } from "fs-i";
-import { writeFileSync, readFileSync } from "fs-extra";
+import { mkdirs } from "fs-i";
 import { GlobalData } from "../model/globalData";
+import * as path from "path";
+import { unzipPath } from "zip-i";
+import { editPackageJson, editFile } from "../common/util";
+import { writeFileSync } from "fs";
 
 export class NodeProj extends BaseProj {
   getQuestions() {
@@ -28,122 +31,113 @@ export class NodeProj extends BaseProj {
   async run() {
     let answer = await this.getAnswers();
 
-    let projPath = `${process.cwd()}/${GlobalData.projectName}`;
+    let templateZipFile = path.join(__dirname, "..", "template/node.zip");
+
+    await unzipPath(templateZipFile, GlobalData.projectRootPath);
 
     if (answer.needDocs === "是") {
-      this.addDocs(projPath);
+      this.addDocs(GlobalData.projectRootPath);
     }
 
     if (answer.unittest === "是") {
-      this.addUnitTest(projPath);
+      this.addUnitTest();
     }
   }
 
   private async addDocs(path: string) {
     // package.json
-    {
-      let file = `${path}/package.json`;
-      let fileContent = await readFileUtf8(file);
-      let json = JSON.parse(fileContent);
+    await editPackageJson(json => {
+      Object.assign(json.devDependencies, {
+        typedoc: "^0.9.0",
+        "typedoc-format": "^1.0.2"
+      });
 
-      json.devDependencies["typedoc"] = "^0.9.0";
-      json.devDependencies["typedoc-format"] = "^1.0.2";
-
-      json.scripts["docs"] = "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js";
-      json.scripts["build"] = "npm run clean && npm run tsBuild && npm run docs";
-      fileContent = JSON.stringify(json, null, 2);
-      await writeFileSync(file, fileContent);
-    }
+      Object.assign(json, {
+        docs: "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
+        build: "npm run clean && npm run tsBuild && npm run docs"
+      });
+    });
   }
-  private async addUnitTest(path: string) {
+  private async addUnitTest() {
     // package.json
-    {
-      let file = `${path}/package.json`;
-      let fileContent = await readFileUtf8(file);
-      let json = JSON.parse(fileContent);
+    await editPackageJson(json => {
+      Object.assign(json.devDependencies, {
+        "@types/chai": "^4.0.5",
+        chai: "^4.1.2",
+        "@types/mocha": "^2.2.44",
+        mocha: "^4.0.1",
+        coveralls: "^3.0.0",
+        nyc: "^11.3.0",
+        "source-map-support": "^0.5.0"
+      });
 
-      json.devDependencies["@types/chai"] = "^4.0.5";
-      json.devDependencies["chai"] = "^4.1.2";
-      json.devDependencies["@types/mocha"] = "^2.2.44";
-      json.devDependencies["mocha"] = "^4.0.1";
+      Object.assign(json.scripts, {
+        test: "nyc mocha -t 5000",
+        "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+      });
 
-      json.devDependencies["coveralls"] = "^3.0.0";
-      json.devDependencies["nyc"] = "^11.3.0";
-
-      json.devDependencies["source-map-support"] = "^0.5.0";
-
-      json.scripts["test"] = "nyc mocha -t 5000";
-      json.scripts["test-nyc"] = "nyc npm test && nyc report --reporter=text-lcov | coveralls";
-
-      json["nyc"] = {
-        include: ["src/**/*.ts"],
-        extension: [".ts"],
-        require: ["ts-node/register"],
-        sourceMap: true,
-        instrument: true
-      };
-
-      fileContent = JSON.stringify(json, null, 2);
-
-      await writeFileSync(file, fileContent);
-    }
+      Object.assign(json, {
+        nyc: {
+          include: ["src/**/*.ts"],
+          extension: [".ts"],
+          require: ["ts-node/register"],
+          sourceMap: true,
+          instrument: true
+        }
+      });
+    });
 
     // .travis.yml
     {
-      let file = `${path}/.travis.yml`;
-      let fileContent = await readFileUtf8(file);
+      await editFile(path.join(GlobalData.projectRootPath, ".travis.yml"), fileContent => {
+        fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
+          return (
+            w +
+            `
+    - npm run test`
+          );
+        });
 
-      fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
-        return (
-          w +
-          `
-  - npm run test`
-        );
-      });
+        fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
+          return (
+            w +
+            `
+    - npm run test-nyc`
+          );
+        });
 
-      fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
-        return (
-          w +
-          `
-  - npm run test-nyc`
-        );
+        fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
+          return (
+            w +
+            `
+    - provider: pages
+      skip_cleanup: true
+      github_token: $GITHUB_TOKEN
+      local_dir: docs
+      on:
+        branch: master
+  `
+          );
+        });
+        return fileContent;
       });
-
-      fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
-        return (
-          w +
-          `
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    local_dir: docs
-    on:
-      branch: master
-`
-        );
-      });
-      await writeFileSync(file, fileContent);
     }
 
     // test js
     {
-      let testPath = `${path}/test`;
+      let testPath = path.join(GlobalData.projectRootPath, "test");
       await mkdirs(testPath);
 
-      await writeFileSync(
-        `${testPath}/mocha.opts`,
-        `
+      writeFileSync (path.join(testPath, "mocha.opts"), `
 --require ts-node/register
 --require source-map-support/register
 --full-trace
 --bail
 test/**/*.test.ts
-      `.trim()
+        `.trim()
       );
 
-      await writeFileSync(
-        `${testPath}/index.test.ts`,
-        `
+      writeFileSync(path.join(testPath, "index.test.ts"), `
 import { expect } from "chai";
 import "mocha";
 import { add } from "../src/index";

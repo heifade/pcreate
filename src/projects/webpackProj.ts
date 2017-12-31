@@ -1,11 +1,10 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
 import { GlobalData } from "../model/globalData";
-import { writeFileSync } from "fs";
 import { ProjectType } from "../model/ProjectType";
-import { readFileUtf8 } from "fs-i/es";
 import * as path from "path";
 import { unzipPath } from "zip-i";
+import { editFile, editPackageJson } from "../common/util";
 
 export class WebpackProj extends BaseProj {
   getQuestions() {
@@ -18,36 +17,33 @@ export class WebpackProj extends BaseProj {
       return;
     }
 
-    let projPath = `${process.cwd()}/${GlobalData.projectName}`;
-
     let templateZipFile = path.join(__dirname, "..", "template/webpack.zip");
-    await unzipPath(templateZipFile, projPath);
+    await unzipPath(templateZipFile, GlobalData.projectRootPath);
 
-    this.saveWebpackConfig(projPath);
-    this.savePackage(projPath);
+    this.saveWebpackConfig();
+    this.savePackage();
   }
 
-  private async saveWebpackConfig(path: string) {
-    let file = `${path}/webpack.config.ts`;
-    let fileContent = await readFileUtf8(file);
-    await writeFileSync(file, fileContent);
+  private async saveWebpackConfig() {
+    await editFile(path.join(GlobalData.projectRootPath, "webpack.config.ts"), fileContent => {
+      return fileContent;
+    });
   }
 
-  private async savePackage(path: string) {
-    let file = `${path}/package.json`;
-    let fileContent = await readFileUtf8(file);
-    let json = JSON.parse(fileContent);
+  private async savePackage() {
+    await editPackageJson(json => {
+      Object.assign(json.devDependencies, {
+        "@types/webpack": "^3.8.1",
+        webpack: "^3.10.0",
+        "ts-loader": "^3.2.0",
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-preset-es2015": "^6.24.1"
+      });
 
-    json.devDependencies["@types/webpack"] = "^3.8.1";
-    json.devDependencies["webpack"] = "^3.10.0";
-    json.devDependencies["ts-loader"] = "^3.2.0";
-    json.devDependencies["babel-core"] = "^6.26.0";
-    json.devDependencies["babel-loader"] = "^7.1.2";
-    json.devDependencies["babel-preset-es2015"] = "^6.24.1";
-
-    json.scripts["tsBuild"] = "webpack";
-
-    fileContent = JSON.stringify(json, null, 2);
-    await writeFileSync(file, fileContent);
+      Object.assign(json.scripts, {
+        tsBuild: "webpack"
+      });
+    });
   }
 }
