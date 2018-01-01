@@ -19,7 +19,7 @@
     "build": "npm run clean && npm run tsBuild && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && node ./es/index.js --help"
+    "start": "npm run build && node ./es/index.js"
   },
   "nyc": {
     "include": [
@@ -38,6 +38,7 @@
   "author": "heifade",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^2.3.0",
     "fs-extra": "^5.0.0",
     "fs-i": "^1.0.4",
     "inquirer": "^4.0.1",
