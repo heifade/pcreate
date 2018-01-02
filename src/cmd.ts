@@ -1,7 +1,7 @@
 import { usage, demand, option, options, commandDir, argv, count, Argv } from "yargs";
 import chalk from 'chalk'
 
-commandDir("index")
+commandDir("cmd")
   .demandCommand(1, '请输入子命令!')
   // .version('version')
   // .help('help')
