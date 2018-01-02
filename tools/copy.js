@@ -13,13 +13,20 @@ async function run(params) {
   let subPathList = await fsi.getDirs(templatePath);
 
   for (var subPath of subPathList) {
-    let targetFile = fsi.getFileName(subPath); // 获取目录名称
+    let subSubPathList = await fsi.getDirs(subPath);
 
-    let targetPath = `${rootPath}/es/template`;
-    targetFile = `${targetPath}/${targetFile}.zip`;
+    let targetPath = path.join(rootPath, "es", "template", path.basename(subPath));
 
     await fsi.mkdirs(targetPath);
-    await zipi.zipPath(subPath, targetFile);
+
+    for (var subSubPath of subSubPathList) {
+      let shortPathName = path.basename(subSubPath);
+
+      let sourcePath = path.join(subPath, shortPathName);
+      let targetZipFile = path.join(targetPath, `${shortPathName}.zip`); //`${targetPath}/${targetFile}.zip`;
+
+      await zipi.zipPath(sourcePath, targetZipFile);
+    }
   }
 }
 

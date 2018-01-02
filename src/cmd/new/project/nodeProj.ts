@@ -1,11 +1,12 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
 import { mkdirs } from "fs-i";
-import { GlobalData } from "../model/globalData";
+import { GlobalData } from "../../../model/globalData";
 import * as path from "path";
 import { unzipPath } from "zip-i";
-import { editPackageJson, editFile } from "../common/util";
+import { editPackageJson, editFile } from "../../../common/util";
 import { writeFileSync } from "fs";
+import { TemplateData } from "../../../common/template";
 
 export class NodeProj extends BaseProj {
   getQuestions() {
@@ -23,6 +24,13 @@ export class NodeProj extends BaseProj {
         message: "是否需要创建单元测试？",
         default: "否",
         choices: ["是", "否"]
+      },
+      {
+        name: "isCommand",
+        type: "list",
+        message: "是否创建命令？",
+        default: "否",
+        choices: ["是", "否"]
       }
     ];
 
@@ -31,20 +39,24 @@ export class NodeProj extends BaseProj {
   async run() {
     let answer = await this.getAnswers();
 
-    let templateZipFile = path.join(__dirname, "..", "template/node.zip");
+    let templateZipFile = TemplateData.getProjectTemplate("node.zip");
 
     await unzipPath(templateZipFile, GlobalData.projectRootPath);
 
     if (answer.needDocs === "是") {
-      this.addDocs(GlobalData.projectRootPath);
+      this.addDocs();
     }
 
     if (answer.unittest === "是") {
       this.addUnitTest();
     }
+
+    if (answer.isCommand === "是") {
+      this.addCommand();
+    }
   }
 
-  private async addDocs(path: string) {
+  private async addDocs() {
     // package.json
     await editPackageJson(json => {
       Object.assign(json.devDependencies, {
@@ -128,7 +140,9 @@ export class NodeProj extends BaseProj {
       let testPath = path.join(GlobalData.projectRootPath, "test");
       await mkdirs(testPath);
 
-      writeFileSync (path.join(testPath, "mocha.opts"), `
+      writeFileSync(
+        path.join(testPath, "mocha.opts"),
+        `
 --require ts-node/register
 --require source-map-support/register
 --full-trace
@@ -137,7 +151,9 @@ test/**/*.test.ts
         `.trim()
       );
 
-      writeFileSync(path.join(testPath, "index.test.ts"), `
+      writeFileSync(
+        path.join(testPath, "index.test.ts"),
+        `
 import { expect } from "chai";
 import "mocha";
 import { add } from "../src/index";
@@ -153,5 +169,48 @@ describe("index", function() {
       `.trim()
       );
     }
+  }
+
+  private async addCommand() {
+
+    let projectName = GlobalData.projectName;
+
+    // package.json
+    await editPackageJson(json => {
+      Object.assign(json, {
+        bin: {
+          [projectName]: `./es/bin/${projectName}`
+        }
+      });
+
+      json.scripts["code-build"] = "tsc -p tsconfig.json && node ./tools/copy.js";
+    });
+
+    // bin
+    let binPath = path.join(GlobalData.projectRootPath, "src", "bin");
+    await mkdirs(binPath);
+
+    writeFileSync(
+      path.join(binPath, `${projectName}`),
+      `
+#!/usr/bin/env node
+module.exports = require('../');
+      `.trim()
+    );
+
+    writeFileSync(
+      path.join(binPath, `${projectName}.cmd`),
+      `
+@IF EXIST "%~dp0\\node.exe" (
+  "%~dp0\\node.exe"  "%~dp0\\..\\${projectName}\\bin\\${projectName}" %*
+) ELSE (
+  @SETLOCAL
+  @SET PATHEXT=%PATHEXT:;.JS;=;%
+  node  "%~dp0\\..\\${projectName}\\bin\\${projectName}" %*
+)
+      `.trim()
+    );
+
+
   }
 }

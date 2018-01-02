@@ -16,10 +16,10 @@
     "clean": "node ./tools/clean.js",
     "code-build": "tsc -p tsconfig.json && node ./tools/copy.js",
     "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
-    "build": "npm run clean && npm run code-build && npm run docs",
+    "build": "npm run clean && npm run code-build",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && node ./es/cmd.js"
+    "start": "npm run build && clear && node ./es/cmd.js new project"
   },
   "nyc": {
     "include": [

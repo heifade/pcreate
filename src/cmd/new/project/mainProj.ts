@@ -3,12 +3,12 @@ import { Questions } from "inquirer";
 import { unzipPath } from "zip-i";
 import { getAllFiles, mkdirs, rmdir } from "fs-i";
 import * as path from "path";
-import { GlobalData } from "../model/globalData";
-import { ProjectType, newProjectType } from "../model/ProjectType";
+import { GlobalData } from "../../../model/globalData";
+import { ProjectType, newProjectType } from "../../../model/ProjectType";
 import { AngularProj } from "./angularProj";
 import { WebpackProj } from "./webpackProj";
 import { NodeProj } from "./nodeProj";
-import { editFile } from "../common/util";
+import { editFile } from "../../../common/util";
 
 export class MainProj extends BaseProj {
   getQuestions() {

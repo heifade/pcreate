@@ -8,9 +8,6 @@
   "files": [
     "es"
   ],
-  "bin": {
-    "{{projectName}}": "./es/bin/{{projectName}}"
-  },
   "devDependencies": {
     "typescript": "^2.6.1",
     "ts-node": "^4.1.0",
@@ -18,7 +15,7 @@
     "fs-i": "^1.0.4"
   },
   "dependencies": {
-    
+    "@types/node": "^8.5.2"
   },
   "scripts": {
     "clean": "node ./tools/clean.js",
