@@ -8,7 +8,7 @@ commandDir("index")
   .describe('help', '显示帮助')
   .describe('version', '显示版本号')
   
-  .locale("zh")
+  .locale("en")
   // .showHelpOnFail(true, "请传入--help参数以提供帮助")
   // .fail((msg, err) => {
   //   console.log(chalk.red(msg));
