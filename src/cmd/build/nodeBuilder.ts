@@ -14,15 +14,21 @@ export class NodeBuilder implements iBuilder {
     printMessage("正在将TypeScript编译成JavaScript...");
     await asyncExec("tsc", ["-p", projectPath]);
 
+    console.log(1);
+
     let packageJson = await readPackageJson(path.join(projectPath, "package.json"));
+
+    console.log(2);
 
     if (projectConfig.command) {
       await this.addCommand(projectPath, packageJson.name, projectConfig);
     }
+    console.log(3);
 
     if (projectConfig.documents) {
       await this.buildDocs(projectPath);
     }
+    console.log(4);
   }
 
   private async addCommand(projectPath: string, projectName: string, projectConfig: IProjectConfig) {
