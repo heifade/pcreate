@@ -14,12 +14,12 @@
   },
   "scripts": {
     "clean": "node ./tools/clean.js",
-    "code-build": "tsc -p tsconfig.json && node ./tools/copy.js",
+    "code-build": "node ./tools/copy.js && tsc -p tsconfig.json",
     "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
     "build": "npm run clean && npm run code-build",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && clear && node ./es/cmd.js new project"
+    "start": "npm run build && clear && node ./es/cmd.js"
   },
   "nyc": {
     "include": [
@@ -40,7 +40,7 @@
   "dependencies": {
     "chalk": "^2.3.0",
     "fs-extra": "^5.0.0",
-    "fs-i": "^1.0.4",
+    "fs-i": "^1.0.5",
     "inquirer": "^4.0.1",
     "update": "^0.7.4",
     "yargs": "^10.0.3",

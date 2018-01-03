@@ -1,0 +1,31 @@
+{
+  "name": "{{projectName}}",
+  "version": "1.0.0-beta1",
+  "description": "{{projectName}}",
+  "main": "./es/index.js",
+  "module": "./es/index.js",
+  "typings": "./es/index",
+  "files": [
+    "es"
+  ],
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "ts-node": "^4.1.0",
+    "fs-extra": "^5.0.0",
+    "fs-i": "^1.0.4"
+  },
+  "dependencies": {
+    "@types/node": "^8.5.2"
+  },
+  "scripts": {
+    "clean": "node ./tools/clean.js",
+    "code-build": "tsc -p tsconfig.json",
+    "build": "npm run clean && npm run code-build",
+    "start": "npm run build && node ./es/index.js"
+  },
+  "keywords": [
+    "{{projectName}}"
+  ],
+  "author": "heifade",
+  "license": "MIT"
+}
