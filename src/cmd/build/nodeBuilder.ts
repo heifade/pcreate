@@ -14,21 +14,15 @@ export class NodeBuilder implements iBuilder {
     printMessage("正在将TypeScript编译成JavaScript...");
     await asyncExec("tsc", ["-p", projectPath]);
 
-    console.log(1);
-
     let packageJson = await readPackageJson(path.join(projectPath, "package.json"));
-
-    console.log(2);
 
     if (projectConfig.command) {
       await this.addCommand(projectPath, packageJson.name, projectConfig);
     }
-    console.log(3);
 
     if (projectConfig.documents) {
       await this.buildDocs(projectPath);
     }
-    console.log(4);
   }
 
   private async addCommand(projectPath: string, projectName: string, projectConfig: IProjectConfig) {
@@ -91,6 +85,9 @@ module.exports = require('../');
     let docs = path.join(projectPath, "docs");
     let src = path.join(projectPath, "src");
     let typedoc = path.join(getCreateProjectPath(), "node_modules", "typedoc", "bin", "typedoc");
+
+    console.log(typedoc);
+
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
 
     await format(docs);
