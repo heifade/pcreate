@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta48",
+  "version": "1.0.0-beta49",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -19,7 +19,7 @@
     "build": "npm run clean && npm run code-build && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && clear && node ./es/cmd.js"
+    "start": "npm run build && clear && node ./es/index.js"
   },
   "nyc": {
     "include": [
