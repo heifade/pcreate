@@ -18,7 +18,10 @@ export let handler = async (argv: Argv) => {
 
   let builder: iBuilder = null;
 
-  let projectPath = "/Volumes/RamDisk/Github/p1";
+  // let projectPath = "/Volumes/RamDisk/Github/p1";
+
+  let projectPath = __dirname;
+
   let configFileName = `${projectPath}/project-config.ts`;
 
   let projectConfig = await readProjectConfig(configFileName);

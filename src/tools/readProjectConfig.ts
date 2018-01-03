@@ -2,6 +2,7 @@ import * as path from "path";
 import * as browserify from "browserify";
 import { createWriteStream, unlinkSync, existsSync } from "fs";
 import { IProjectConfig } from "../model/IProjectConfig";
+let tsify = require("tsify");
 
 export async function readProjectConfig(configFileName: string) {
   return new Promise<IProjectConfig>((resolve, reject) => {
@@ -25,7 +26,7 @@ export async function readProjectConfig(configFileName: string) {
       // 没找到更好的方法，这里麻烦，需要将编译生成的js文件第一行与最后一行去除掉
       let reader = browserify()
         .add(configFileName)
-        .plugin("tsify", { noImplicitAny: true, target: "es6" })
+        .plugin(tsify, { noImplicitAny: true, target: "es6" })
         .bundle();
 
       let fileContent = "";
@@ -43,7 +44,6 @@ export async function readProjectConfig(configFileName: string) {
         let file = require(targetFile);
 
         let projectConfig = (file.default || file) as IProjectConfig;
-
 
         resolve(projectConfig);
         unlinkSync(targetFile);
