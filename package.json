@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta50",
+  "version": "1.0.0-beta51",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -46,7 +46,8 @@
     "yargs": "^10.0.3",
     "zip-i": "^1.0.2",
     "browserify": "^14.5.0",
-    "tsify": "^3.0.4"
+    "tsify": "^3.0.4",
+    "typedoc-format": "^1.0.2"
   },
   "devDependencies": {
     "@types/browserify": "^12.0.33",
@@ -62,7 +63,6 @@
     "source-map-support": "^0.5.0",
     "ts-node": "^4.1.0",
     "typedoc": "^0.9.0",
-    "typedoc-format": "^1.0.2",
     "typescript": "^2.6.1"
   }
 }
