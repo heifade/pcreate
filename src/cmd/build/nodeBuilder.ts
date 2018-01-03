@@ -6,12 +6,12 @@ import { mkdirs } from "fs-i/es";
 import { writeFileSync } from "fs";
 import { editPackageJson, getCreateProjectPath } from "../../common/util";
 import { asyncExec } from "../../tools/asyncExec";
-import { format } from 'typedoc-format';
+import { format } from "typedoc-format";
 import { printMessage } from "../../common/log";
 
 export class NodeBuilder implements iBuilder {
   public async run(projectPath: string, projectConfig: IProjectConfig) {
-    printMessage('正在将TypeScript编译成JavaScript...');
+    printMessage("正在将TypeScript编译成JavaScript...");
     await asyncExec("tsc", ["-p", projectPath]);
 
     let packageJson = await readPackageJson(path.join(projectPath, "package.json"));
@@ -26,9 +26,7 @@ export class NodeBuilder implements iBuilder {
   }
 
   private async addCommand(projectPath: string, projectName: string, projectConfig: IProjectConfig) {
-
-    printMessage('正在将程序处理成命令行...');
-    
+    printMessage("正在将程序处理成命令行...");
 
     // package.json
     await editPackageJson(projectPath, json => {
@@ -83,10 +81,10 @@ module.exports = require('../');
   }
 
   private async buildDocs(projectPath: string) {
-    printMessage('正在生成文档...');
+    printMessage("正在生成文档...");
     let docs = path.join(projectPath, "docs");
     let src = path.join(projectPath, "src");
-    let typedoc = path.join(getCreateProjectPath(), "node_modules", 'typedoc', 'bin', 'typedoc');
+    let typedoc = path.join(getCreateProjectPath(), "node_modules", "typedoc", "bin", "typedoc");
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
 
     await format(docs);
