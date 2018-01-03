@@ -31,7 +31,7 @@ export class AngularProj extends BaseProj {
   }
 
   private async addAntDesign() {
-    await editPackageJson(json => {
+    await editPackageJson(GlobalData.projectRootPath, json => {
       Object.assign(json.devDependencies, {
         "ng-zorro-antd": "^0.6.8"
       });

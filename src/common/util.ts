@@ -5,12 +5,12 @@ import { writeFileSync } from "fs";
 
 /**
  * 编辑package.json文件
- * 
+ *
  * @export
  * @param {(json: any) => void} edit - 修改package.json里的对象json
  */
-export async function editPackageJson(edit: (json: any) => void) {
-  await editFile(path.join(GlobalData.projectRootPath, "package.json"), fileContent => {
+export async function editPackageJson(projectPath: string, edit: (json: any) => void) {
+  await editFile(path.join(projectPath, "package.json"), fileContent => {
     let json = JSON.parse(fileContent);
 
     edit(json);
@@ -21,7 +21,7 @@ export async function editPackageJson(edit: (json: any) => void) {
 
 /**
  * 编辑文件
- * 
+ *
  * @export
  * @param {string} fileName - 文件名
  * @param {(fileContent: string) => string} edit - 修改文件内容并返回
@@ -33,3 +33,16 @@ export async function editFile(fileName: string, edit: (fileContent: string) => 
 
   await writeFileSync(fileName, fileContent);
 }
+
+/**
+ * 获取构建程序所在目录
+ *
+ * @export
+ * @returns
+ */
+export function getCreateProjectPath() {
+  return path.join(__dirname, "..", "..");
+}
+
+
+

@@ -1,3 +1,5 @@
+import { IProjectConfig } from "../../model/IProjectConfig";
+
 export interface iBuilder {
-  run(): void;
+  run(projectPath: string, projectConfig: IProjectConfig): void;
 }

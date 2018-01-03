@@ -32,7 +32,7 @@ export class WebpackProj extends BaseProj {
   }
 
   private async savePackage() {
-    await editPackageJson(json => {
+    await editPackageJson(GlobalData.projectRootPath, json => {
       Object.assign(json.devDependencies, {
         "@types/webpack": "^3.8.1",
         webpack: "^3.10.0",

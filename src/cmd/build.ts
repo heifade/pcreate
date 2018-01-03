@@ -1,32 +1,39 @@
 import { Argv, Arguments } from "yargs";
 import { iBuilder } from "./build/iBuilder";
-import { readFileUtf8Sync } from "fs-i/es";
-import * as path from 'path';
+import { readFileUtf8Sync, rmdirSync } from "fs-i";
+import * as path from "path";
+import { readProjectConfig } from "../tools/readProjectConfig";
+import { NodeBuilder } from "./build/nodeBuilder";
+import { printMessage, printSuccessMessage } from "../common/log";
 
 export let command = "build";
 export let desc = "构建项目";
 export let builder = (yargs: Argv) => {
-  return yargs
+  return yargs;
 };
 
 export let handler = async (argv: Argv) => {
 
+  printMessage('构建开始...');
+
   let builder: iBuilder = null;
 
-  let projectPath = '/Volumes/RamDisk/Github/p1';
+  let projectPath = "/Volumes/RamDisk/Github/p1";
+  let configFileName = `${projectPath}/project-config.ts`;
 
-  //let projectConfig = readFileUtf8Sync();
+  let projectConfig = await readProjectConfig(configFileName);
 
-  // console.log(projectPath);
+  rmdirSync(path.join(projectPath, "./es"));
+  rmdirSync(path.join(projectPath, "./docs"));
 
-  let pp = require(path.join(projectPath, 'project-config.ts'))
+  switch (projectConfig.projectType) {
+    case "node":
+      builder = new NodeBuilder();
+      break;
+  }
 
-  console.log(11, pp);
+  await builder.run(projectPath, projectConfig);
 
 
-
-
-
-  // builder.run();
-  
+  printSuccessMessage('构建完成');
 };

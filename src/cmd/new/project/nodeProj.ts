@@ -51,14 +51,14 @@ export class NodeProj extends BaseProj {
       this.addUnitTest();
     }
 
-    if (answer.isCommand === "是") {
-      this.addCommand();
-    }
+    // if (answer.isCommand === "是") {
+    //   this.addCommand();
+    // }
   }
 
   private async addDocs() {
     // package.json
-    await editPackageJson(json => {
+    await editPackageJson(GlobalData.projectRootPath, json => {
       Object.assign(json.devDependencies, {
         typedoc: "^0.9.0",
         "typedoc-format": "^1.0.2"
@@ -72,7 +72,7 @@ export class NodeProj extends BaseProj {
   }
   private async addUnitTest() {
     // package.json
-    await editPackageJson(json => {
+    await editPackageJson(GlobalData.projectRootPath, json => {
       Object.assign(json.devDependencies, {
         "@types/chai": "^4.0.5",
         chai: "^4.1.2",
@@ -171,46 +171,5 @@ describe("index", function() {
     }
   }
 
-  private async addCommand() {
-
-    let projectName = GlobalData.projectName;
-
-    // package.json
-    await editPackageJson(json => {
-      Object.assign(json, {
-        bin: {
-          [projectName]: `./es/bin/${projectName}`
-        }
-      });
-
-      json.scripts["code-build"] = "tsc -p tsconfig.json && node ./tools/copy.js";
-    });
-
-    // bin
-    let binPath = path.join(GlobalData.projectRootPath, "src", "bin");
-    await mkdirs(binPath);
-
-    writeFileSync(
-      path.join(binPath, `${projectName}`),
-      `
-#!/usr/bin/env node
-module.exports = require('../');
-      `.trim()
-    );
-
-    writeFileSync(
-      path.join(binPath, `${projectName}.cmd`),
-      `
-@IF EXIST "%~dp0\\node.exe" (
-  "%~dp0\\node.exe"  "%~dp0\\..\\${projectName}\\bin\\${projectName}" %*
-) ELSE (
-  @SETLOCAL
-  @SET PATHEXT=%PATHEXT:;.JS;=;%
-  node  "%~dp0\\..\\${projectName}\\bin\\${projectName}" %*
-)
-      `.trim()
-    );
-
-
-  }
+  
 }
