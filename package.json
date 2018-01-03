@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta47",
+  "version": "1.0.0-beta48",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -16,7 +16,7 @@
     "clean": "node ./tools/clean.js",
     "code-build": "node ./tools/copy.js && tsc -p tsconfig.json",
     "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
-    "build": "npm run clean && npm run code-build",
+    "build": "npm run clean && npm run code-build && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "start": "npm run build && clear && node ./es/cmd.js"
