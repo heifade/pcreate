@@ -13,14 +13,13 @@ export let builder = (yargs: Argv) => {
 };
 
 export let handler = async (argv: Argv) => {
-
-  printMessage('构建开始...');
+  printMessage("构建开始...");
 
   let builder: iBuilder = null;
 
   // let projectPath = "/Volumes/RamDisk/Github/p1";
 
-  let projectPath = __dirname;
+  let projectPath = process.cwd();
 
   let configFileName = `${projectPath}/project-config.ts`;
 
@@ -37,6 +36,5 @@ export let handler = async (argv: Argv) => {
 
   await builder.run(projectPath, projectConfig);
 
-
-  printSuccessMessage('构建完成');
+  printSuccessMessage("构建完成");
 };
