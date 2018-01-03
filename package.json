@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta57",
+  "version": "1.0.0-beta58",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -46,6 +46,7 @@
     "yargs": "^10.0.3",
     "zip-i": "^1.0.2",
     "browserify": "^14.5.0",
+    "typescript": "^2.6.2",
     "tsify": "^3.0.4",
     "typedoc-format": "^1.0.2",
     "ts-node": "^4.1.0",
@@ -62,7 +63,6 @@
     "coveralls": "^3.0.0",
     "mocha": "^4.0.1",
     "nyc": "^11.3.0",
-    "source-map-support": "^0.5.0",
-    "typescript": "^2.6.2"
+    "source-map-support": "^0.5.0"
   }
 }
