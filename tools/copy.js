@@ -63,9 +63,13 @@ async function copyTemplate() {
 }
 
 async function run(params) {
+  console.log(1);
   await copyIProjectConfig();
+  console.log(2);
   await copyBin();
+  console.log(3);
   await copyTemplate();
+  console.log(4);
 }
 
 run()
