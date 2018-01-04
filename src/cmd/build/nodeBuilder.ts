@@ -3,8 +3,8 @@ import * as path from "path";
 import { IProjectConfig } from "../../model/IProjectConfig";
 import { readPackageJson } from "../../tools/readPackageJson";
 import { mkdirs } from "fs-i/es";
-import { writeFileSync } from "fs";
-import { editPackageJson, getCreateProjectPath } from "../../common/util";
+import { writeFileSync, existsSync } from "fs";
+import { editPackageJson, getCreateProjectPath, getCreateProjectDependencies } from "../../common/util";
 import { asyncExec } from "../../tools/asyncExec";
 import { format } from "typedoc-format";
 import { printMessage } from "../../common/log";
@@ -84,7 +84,7 @@ module.exports = require('../');
     printMessage("正在生成文档...");
     let docs = path.join(projectPath, "docs");
     let src = path.join(projectPath, "src");
-    let typedoc = path.join(getCreateProjectPath(), "node_modules", "typedoc", "bin", "typedoc");
+    let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
 
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
 

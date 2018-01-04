@@ -1,7 +1,7 @@
 import * as path from "path";
 import { GlobalData } from "../model/globalData";
 import { readFileUtf8 } from "fs-i/es";
-import { writeFileSync } from "fs";
+import { writeFileSync, existsSync } from "fs";
 
 /**
  * 编辑package.json文件
@@ -44,5 +44,18 @@ export function getCreateProjectPath() {
   return path.join(__dirname, "..", "..");
 }
 
+/**
+ * 获取构建程序所用到的工具
+ *
+ * @export
+ * @param {string} projectPath
+ * @param {string} url
+ */
+export function getCreateProjectDependencies(projectPath: string, url: string) {
+  let typedoc = path.join(getCreateProjectPath(), "node_modules", url);
 
-
+  if (!existsSync(typedoc)) {
+    typedoc = path.join(projectPath, "node_modules", url);
+  }
+  return typedoc;
+}
