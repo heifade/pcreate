@@ -84,9 +84,7 @@ module.exports = require('../');
     printMessage("正在生成文档...");
     let docs = path.join(projectPath, "docs");
     let src = path.join(projectPath, "src");
-    //let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
-
-    let typedoc = 'typedoc';
+    let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
 
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
 
