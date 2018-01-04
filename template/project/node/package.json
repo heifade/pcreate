@@ -18,14 +18,12 @@
     "@types/node": "^8.5.2"
   },
   "scripts": {
-    "clean": "node ./tools/clean.js",
-    "code-build": "tsc -p tsconfig.json",
-    "build": "npm run clean && npm run code-build",
-    "start": "npm run build && node ./es/index.js"
+    "build": "pc build",
+    "start": "pc build && node ./es/index.js"
   },
   "keywords": [
     "{{projectName}}"
   ],
-  "author": "heifade",
+  "author": "",
   "license": "MIT"
 }
