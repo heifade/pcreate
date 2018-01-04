@@ -10,9 +10,7 @@
   ],
   "devDependencies": {
     "typescript": "^2.6.1",
-    "ts-node": "^4.1.0",
-    "fs-extra": "^5.0.0",
-    "fs-i": "^1.0.4"
+    "ts-node": "^4.1.0"
   },
   "dependencies": {
     "@types/node": "^8.5.2"

@@ -3,7 +3,7 @@ sudo: enabled
 node_js:
   - "8"
 script:
-  - npm run build
+  - pc build
 after_script:
 
 
