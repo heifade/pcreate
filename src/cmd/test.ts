@@ -28,9 +28,12 @@ export let handler = async (yargs: any) => {
 
   let projectPath = path.resolve(yargs.p) || process.cwd();
 
+  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
 
-  spawn(mocha, [], {
+  console.log(nyc, mocha);
+
+  spawn(nyc, [mocha, "-t", "5000"], {
     cwd: projectPath,
     stdio: ['inherit', 'inherit', 'inherit']
   });

@@ -52,10 +52,10 @@ export function getCreateProjectPath() {
  * @param {string} url
  */
 export function getCreateProjectDependencies(projectPath: string, url: string) {
-  let typedoc = path.join(getCreateProjectPath(), "node_modules", url);
+  let cmd = path.join(getCreateProjectPath(), "node_modules", url);
 
-  if (!existsSync(typedoc)) {
-    typedoc = path.join(projectPath, "node_modules", url);
+  if (!existsSync(cmd)) {
+    cmd = path.join(projectPath, "node_modules", url);
   }
-  return typedoc;
+  return cmd;
 }
