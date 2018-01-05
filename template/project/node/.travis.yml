@@ -2,6 +2,8 @@ language: node_js
 sudo: enabled
 node_js:
   - "8"
+before_script:
+  - npm i pcreate
 script:
   - pc build
 after_script:

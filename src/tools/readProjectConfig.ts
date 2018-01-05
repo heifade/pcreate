@@ -6,6 +6,10 @@ let tsify = require("tsify");
 
 export async function readProjectConfig(configFileName: string) {
   return new Promise<IProjectConfig>((resolve, reject) => {
+    if (!existsSync(configFileName)) {
+      return reject(`缺少文件${configFileName}！`);
+    }
+
     let targetFile = configFileName + Math.random() + ".js";
     try {
       let fileWriter = createWriteStream(targetFile);
