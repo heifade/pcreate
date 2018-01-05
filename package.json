@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta66",
+  "version": "1.0.0-beta67",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",

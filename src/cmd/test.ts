@@ -8,7 +8,7 @@ import { printMessage, printSuccessMessage, printErrorMessage } from "../common/
 import { projectConfigFile } from "../common/const";
 import { asyncExec } from "../tools/asyncExec";
 import { getCreateProjectDependencies } from "../common/util";
-import { spawn } from "child_process";
+import { spawn, execFile, execFileSync } from "child_process";
 
 export let command = "test";
 export let desc = "测试项目";
@@ -31,12 +31,46 @@ export let handler = async (yargs: any) => {
   let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
 
-  console.log(nyc, mocha);
+  // let ch = spawn(nyc, [mocha, "-t", "5000"], {
+  //   cwd: projectPath,
+  //   stdio: ["inherit", "inherit", "inherit"]
+  // });
 
-  spawn(nyc, [mocha, "-t", "5000"], {
-    cwd: projectPath,
-    stdio: ['inherit', 'inherit', 'inherit']
-  });
+  // try {
+  //   let ch = spawn(mocha, ["-t", "5000"], {
+  //     cwd: projectPath,
+  //     stdio: ["inherit", "inherit", "inherit"]
+  //   });
+  // }
+  // catch(e) {
+  //   console.log('error', e);
+  // }
+
+  try {
+    await new Promise((resolve, reject) => {
+      execFile(nyc, [mocha, "-t", "5000"], { cwd: projectPath, encoding: "utf-8" }, (err, stdout, stderr) => {
+        if (err) {
+          console.log(stdout);
+          reject(stdout);
+        } else {
+          console.log(stdout);
+          resolve(stdout);
+        }
+      });
+    });
+    return 0;
+  }
+  catch(e) {
+    return 1;
+  }
+  
+
+  // ch.stdout.on('data', data => {
+  //   console.log('data', (data as Buffer).toString('utf-8'));
+  // });
+  // ch.stderr.on('data', data => {
+  //   console.log('err', (data as Buffer).toString('utf-8'));
+  // });
 
   // await asyncExec(mocha, [], { cwd: projectPath });
 
