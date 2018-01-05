@@ -25,7 +25,7 @@ export let handler = async (yargs: any) => {
 
     let projectPath = path.resolve(yargs.p) || process.cwd();
 
-    let configFileName = `${projectPath}/project-config.ts`;
+    let configFileName = `${projectPath}/project-config1.ts`;
 
     let projectConfig = await readProjectConfig(configFileName);
 
