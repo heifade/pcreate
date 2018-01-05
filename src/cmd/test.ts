@@ -23,7 +23,7 @@ export let builder = (yargs: Argv) => {
     .usage("Usage: $0 test -p .");
 };
 
-export let handler = async (yargs: any) => {
+export let handler = (yargs: any) => {
   printMessage("测试开始...");
 
   let projectPath = path.resolve(yargs.p) || process.cwd();
@@ -46,23 +46,44 @@ export let handler = async (yargs: any) => {
   //   console.log('error', e);
   // }
 
-  try {
-    await new Promise((resolve, reject) => {
-      execFile(nyc, [mocha, "-t", "5000"], { cwd: projectPath, encoding: "utf-8" }, (err, stdout, stderr) => {
-        if (err) {
-          console.log(stdout);
-          reject(stdout);
-        } else {
-          console.log(stdout);
-          resolve(stdout);
-        }
-      });
-    });
-    return 0;
-  }
-  catch(e) {
-    return 1;
-  }
+  // try {
+  //   await new Promise((resolve, reject) => {
+  //     execFile(nyc, [mocha, "-t", "5000"], { cwd: projectPath, encoding: "utf-8" }, (err, stdout, stderr) => {
+  //       if (err) {
+  //         console.log(stdout);
+  //         reject(stdout);
+  //       } else {
+  //         console.log(stdout);
+  //         resolve(stdout);
+  //       }
+  //     });
+  //   });
+  //   return 0;
+  // }
+  // catch(e) {
+  //   throw e;
+  // }
+
+
+  // try {
+  //   await new Promise((resolve, reject) => {
+  //     execFile(nyc, [mocha, "-t", "5000"], { cwd: projectPath, encoding: "utf-8" }, (err, stdout, stderr) => {
+  //       if (err) {
+  //         console.log(stdout);
+  //         reject(stdout);
+  //       } else {
+  //         console.log(stdout);
+  //         resolve(stdout);
+  //       }
+  //     });
+  //   });
+  //   return 0;
+  // }
+  // catch(e) {
+  //   throw e;
+  // }
+
+  return 1;
   
 
   // ch.stdout.on('data', data => {
