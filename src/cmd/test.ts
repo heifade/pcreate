@@ -83,7 +83,7 @@ export let handler = (yargs: any) => {
   //   throw e;
   // }
 
-  return 1;
+  process.exit(1);
   
 
   // ch.stdout.on('data', data => {
