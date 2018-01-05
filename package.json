@@ -19,7 +19,8 @@
     "build": "npm run clean && npm run code-build && npm run docs",
     "test": "nyc mocha -t 5000",
     "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && clear && node ./es/index.js"
+    "start-new": "npm run build && clear && node ./es/index.js new project -p ../p3",
+    "start-build": "npm run build && clear && node ./es/index.js build -p ../p1"
   },
   "nyc": {
     "include": [

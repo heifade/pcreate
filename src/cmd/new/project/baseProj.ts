@@ -3,7 +3,7 @@ import { prompt } from "inquirer";
 
 export abstract class BaseProj {
   abstract getQuestions(): Questions[];
-  abstract run(): void;
+  abstract run(projectPath: string): void;
 
   public async getAnswers() {
     let answer: any = {};

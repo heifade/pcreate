@@ -30,13 +30,13 @@ export class MainProj extends BaseProj {
 
     return questionList;
   }
-  async run() {
+  async run(projectPath: string) {
     let answer = await this.getAnswers();
 
     GlobalData.projectName = answer.projectName;
     GlobalData.projectType = newProjectType(answer.projectType);
 
-    GlobalData.projectRootPath = path.join(process.cwd(), answer.projectName);
+    GlobalData.projectRootPath = path.join(projectPath, answer.projectName);
     await mkdirs(GlobalData.projectRootPath);
 
     let nodeProj = new NodeProj();
