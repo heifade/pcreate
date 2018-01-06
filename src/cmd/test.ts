@@ -33,8 +33,8 @@ export let handler = async (yargs: any) => {
 
     let ch = spawn(nyc, [mocha, "-t", "5000"], {
       cwd: projectPath,
-      //stdio: [process.stdin, process.stdout, process.stderr]
-      stdio: "pipe"
+      stdio: [process.stdin, process.stdout, process.stderr]
+      // stdio: "pipe"
     });
 
     ch.on("exit", code => {
