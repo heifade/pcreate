@@ -47,11 +47,13 @@ export let handler = (yargs: any) => {
 
   printMessage("单元测试成功结束");
 
-  // let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
+  let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
-  let commandText = `"${nyc}" report --reporter=text-lcov`;
+  let commandText = `"${nyc}" report --reporter=text-lcov | coveralls`;
 
   let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
+
+  console.log(res.toString("utf-8"));
 
   printMessage("覆盖率完成");
 };
