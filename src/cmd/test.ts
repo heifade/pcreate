@@ -22,23 +22,21 @@ export let builder = (yargs: Argv) => {
     .usage("Usage: $0 test -p .");
 };
 
-export let handler = async (yargs: any) => {
+export let handler = (yargs: any) => {
   printMessage("测试开始...");
 
-  return new Promise((resolve, reject) => {
-    let projectPath = path.resolve(yargs.p) || process.cwd();
+  let projectPath = path.resolve(yargs.p) || process.cwd();
 
-    let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
-    let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
+  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
+  let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
 
-    let ch = spawn(nyc, [mocha, "-t", "5000"], {
-      cwd: projectPath,
-      stdio: [process.stdin, process.stdout, process.stderr]
-      // stdio: "pipe"
-    });
+  let childProcess = spawn(nyc, [mocha, "-t", "5000"], {
+    cwd: projectPath,
+    stdio: [process.stdin, process.stdout, process.stderr]
+  });
 
-    ch.on("exit", code => {
-      process.exit(code);
-    });
+  childProcess.on("exit", code => {
+    printMessage("测试结束");
+    process.exit(code);
   });
 };
