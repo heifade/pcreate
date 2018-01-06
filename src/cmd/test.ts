@@ -10,7 +10,7 @@ import { getCreateProjectDependencies } from "../common/util";
 import { spawn, execFile, execFileSync } from "child_process";
 
 export let command = "test";
-export let desc = "测试项目";
+export let desc = "单元测试";
 export let builder = (yargs: Argv) => {
   return yargs
     .option("p", {
@@ -23,12 +23,15 @@ export let builder = (yargs: Argv) => {
 };
 
 export let handler = (yargs: any) => {
-  printMessage("测试开始...");
+  printMessage("单元测试开始...");
 
   let projectPath = path.resolve(yargs.p) || process.cwd();
 
   let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
+
+
+  console.log('nyc目录：', nyc);
 
   let childProcess = spawn(nyc, [mocha, "-t", "5000"], {
     cwd: projectPath,
@@ -36,7 +39,9 @@ export let handler = (yargs: any) => {
   });
 
   childProcess.on("exit", code => {
-    printMessage("测试结束");
-    process.exit(code);
+    printMessage("单元测试结束");
+    if (code != 0) {
+      process.exit(code);
+    }
   });
 };
