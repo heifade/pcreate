@@ -37,12 +37,14 @@ export let handler = (yargs: any) => {
   };
 
   let childProcess = spawnSync(nyc, [mocha, "-t", "5000"], options);
-
-  printMessage("单元测试结束");
+  
   if (childProcess.status !== 0) {
+    printErrorMessage("单元测试失败！");
     process.exit(childProcess.status);
     return;
   }
+
+  printMessage("单元测试成功结束");
 
   // let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
