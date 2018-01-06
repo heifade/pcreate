@@ -7,7 +7,7 @@ import { NodeBuilder } from "./build/nodeBuilder";
 import { printMessage, printSuccessMessage, printErrorMessage } from "../common/log";
 import { projectConfigFile } from "../common/const";
 import { getCreateProjectDependencies } from "../common/util";
-import { spawn, execFile, execFileSync } from "child_process";
+import { spawn, execFile, execFileSync, exec } from "child_process";
 
 export let command = "test";
 export let desc = "单元测试";
@@ -30,9 +30,6 @@ export let handler = (yargs: any) => {
   let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
 
-
-  console.log('nyc目录：', nyc);
-
   let childProcess = spawn(nyc, [mocha, "-t", "5000"], {
     cwd: projectPath,
     stdio: [process.stdin, process.stdout, process.stderr]
@@ -42,6 +39,14 @@ export let handler = (yargs: any) => {
     printMessage("单元测试结束");
     if (code != 0) {
       process.exit(code);
+    }
+  });
+
+  exec(`"${nyc}" report --reporter=text-lcov | coveralls`, { encoding: "utf-8" }, (err, stdout, stderr) => {
+    if (err) {
+      process.exit(1);
+    } else {
+      printMessage("覆盖率完成" + stdout);
     }
   });
 };
