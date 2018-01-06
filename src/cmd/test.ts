@@ -37,6 +37,8 @@ export let handler = (yargs: any) => {
   };
 
   let childProcess = spawnSync(nyc, [mocha, "-t", "5000"], options);
+
+  console.log(childProcess.status, childProcess.error, childProcess.stdout, childProcess.stderr);
   
   if (childProcess.status !== 0) {
     printErrorMessage("单元测试失败！");
