@@ -25,13 +25,12 @@ export let builder = (yargs: Argv) => {
 
 export let handler = (yargs: any) => {
   let projectPath = path.resolve(yargs.p) || process.cwd();
-  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
-  test(projectPath, nyc);
+  test(projectPath);
 
-  coveralls(projectPath, nyc);
+  coveralls(projectPath);
 };
 
-function test(projectPath: string, nyc: string) {
+function test(projectPath: string) {
   printMessage("单元测试开始...");
 
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
@@ -54,7 +53,7 @@ function test(projectPath: string, nyc: string) {
   printMessage("单元测试成功结束");
 }
 
-function coveralls(projectPath: string, nyc: string) {
+function coveralls(projectPath: string) {
   printMessage("覆盖率开始...");
 
   let nycrcFile = path.join(projectPath, ".nycrc");
@@ -75,6 +74,8 @@ function coveralls(projectPath: string, nyc: string) {
   "instrument": true
 }`.trim()
   );
+
+  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
 
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
