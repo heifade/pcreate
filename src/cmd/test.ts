@@ -42,7 +42,7 @@ function test(projectPath: string, nyc: string) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
-  let childProcess = spawnSync(nyc, [mocha, "-t", "5000"], options);
+  let childProcess = spawnSync(mocha, ["-t", "5000"], options);
 
   if (childProcess.status !== 0) {
     printErrorMessage(childProcess.error.message);
