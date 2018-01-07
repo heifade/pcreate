@@ -76,25 +76,13 @@ function coveralls(projectPath: string, nyc: string) {
 }`.trim()
   );
 
-  console.log(1);
-
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
-
-  console.log(2);
 
   let commandText = `"${nyc}" mocha -t 5000 && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
 
-  console.log(3, commandText);
-
   let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
-
-  console.log(4);
-  
 
   unlinkSync(nycrcFile);
 
   printMessage("覆盖率完成");
 }
-
-
-
