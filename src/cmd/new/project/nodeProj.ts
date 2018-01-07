@@ -96,12 +96,12 @@ export class NodeProj extends BaseProj {
           return (
             w +
             `
-    - provider: pages
-      skip_cleanup: true
-      github_token: $GITHUB_TOKEN
-      local_dir: docs
-      on:
-        branch: master
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: docs
+    on:
+      branch: master
   `
           );
         });
