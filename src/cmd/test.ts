@@ -8,6 +8,7 @@ import { printMessage, printSuccessMessage, printErrorMessage } from "../common/
 import { projectConfigFile } from "../common/const";
 import { getCreateProjectDependencies } from "../common/util";
 import { spawnSync, SpawnSyncOptionsWithStringEncoding, execSync } from "child_process";
+import { writeFileSync, unlinkSync } from "fs";
 
 export let command = "test";
 export let desc = "单元测试";
@@ -23,11 +24,16 @@ export let builder = (yargs: Argv) => {
 };
 
 export let handler = (yargs: any) => {
+  let projectPath = path.resolve(yargs.p) || process.cwd();
+  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
+  test(projectPath, nyc);
+
+  coveralls(projectPath, nyc);
+};
+
+function test(projectPath: string, nyc: string) {
   printMessage("单元测试开始...");
 
-  let projectPath = path.resolve(yargs.p) || process.cwd();
-
-  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
 
   let options: SpawnSyncOptionsWithStringEncoding = {
@@ -46,16 +52,37 @@ export let handler = (yargs: any) => {
   }
 
   printMessage("单元测试成功结束");
+}
+
+function coveralls(projectPath: string, nyc: string) {
+  printMessage("覆盖率开始...");
+
+  let nycrcFile = path.join(projectPath, ".nycrc");
+
+  writeFileSync(
+    nycrcFile,
+    `{
+  "include": [
+    "src/**/*.ts"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "require": [
+    "ts-node/register"
+  ],
+  "sourceMap": true,
+  "instrument": true
+}`.trim()
+  );
 
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
   let commandText = `"${nyc}" mocha -t 5000 && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
 
-  console.log(commandText);
-
   let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
 
-  console.log(res.toString("utf-8"));
+  unlinkSync(nycrcFile);
 
   printMessage("覆盖率完成");
-};
+}
