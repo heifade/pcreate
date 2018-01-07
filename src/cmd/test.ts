@@ -49,7 +49,7 @@ export let handler = (yargs: any) => {
 
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
-  let commandText = `"${nyc}" report --reporter=text-lcov | coveralls`;
+  let commandText = `"${nyc}" report --reporter=text-lcov | ${coveralls}`;
 
   let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
 
