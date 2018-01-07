@@ -49,7 +49,7 @@ export let handler = (yargs: any) => {
 
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
-  let commandText = `"${nyc}" report --reporter=text-lcov | "${coveralls}"`;
+  let commandText = `"${nyc}" mocha -t 5000 && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
 
   console.log(commandText);
 
