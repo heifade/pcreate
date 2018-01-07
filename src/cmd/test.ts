@@ -33,7 +33,8 @@ export let handler = (yargs: any) => {
 function test(projectPath: string) {
   printMessage("单元测试开始...");
 
-  let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
+  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
+  // let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
 
   let options: SpawnSyncOptionsWithStringEncoding = {
     encoding: "utf8",
@@ -41,7 +42,7 @@ function test(projectPath: string) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
-  let childProcess = spawnSync(mocha, ["-t", "5000"], options);
+  let childProcess = spawnSync(nyc, ["mocha", "-t", "5000"], options);
 
   if (childProcess.status !== 0) {
     printErrorMessage(childProcess.error.message);
