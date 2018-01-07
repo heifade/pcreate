@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta88",
+  "version": "1.0.0-beta89",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -34,6 +34,10 @@
     ],
     "sourceMap": true,
     "instrument": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heifade/pcreate.git"
   },
   "keywords": [],
   "author": "heifade",
