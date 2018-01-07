@@ -59,15 +59,7 @@ export class NodeProj extends BaseProj {
   private async addDocs() {
     // package.json
     await editPackageJson(GlobalData.projectRootPath, json => {
-      Object.assign(json.devDependencies, {
-        typedoc: "^0.9.0",
-        "typedoc-format": "^1.0.2"
-      });
-
-      Object.assign(json, {
-        docs: "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
-        build: "npm run clean && npm run tsBuild && npm run docs"
-      });
+      
     });
   }
   private async addUnitTest() {
@@ -78,45 +70,27 @@ export class NodeProj extends BaseProj {
         chai: "^4.1.2",
         "@types/mocha": "^2.2.44",
         mocha: "^4.0.1",
-        coveralls: "^3.0.0",
-        nyc: "^11.3.0",
-        "source-map-support": "^0.5.0"
-      });
-
-      Object.assign(json.scripts, {
-        test: "nyc mocha -t 5000",
-        "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
-      });
-
-      Object.assign(json, {
-        nyc: {
-          include: ["src/**/*.ts"],
-          extension: [".ts"],
-          require: ["ts-node/register"],
-          sourceMap: true,
-          instrument: true
-        }
       });
     });
 
     // .travis.yml
     {
       await editFile(path.join(GlobalData.projectRootPath, ".travis.yml"), fileContent => {
-        fileContent = fileContent.replace(/script\s*:/, (w, a, b, c, d) => {
+        fileContent = fileContent.replace(/\nscript\s*:/, (w, a, b, c, d) => {
           return (
             w +
             `
-    - npm run test`
+  - pcreate test`
           );
         });
 
-        fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
-          return (
-            w +
-            `
-    - npm run test-nyc`
-          );
-        });
+  //       fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
+  //         return (
+  //           w +
+  //           `
+  // - npm run test-nyc`
+  //         );
+  //       });
 
         fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
           return (
