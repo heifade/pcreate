@@ -51,6 +51,8 @@ export let handler = (yargs: any) => {
 
   let commandText = `"${nyc}" report --reporter=text-lcov | ${coveralls}`;
 
+  console.log(commandText);
+
   let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
 
   console.log(res.toString("utf-8"));
