@@ -42,6 +42,8 @@ function test(projectPath: string) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
+  console.log('test', mocha);
+
   let childProcess = spawnSync(nyc, [mocha, "-t", "5000"], options);
 
   if (childProcess.status !== 0) {
