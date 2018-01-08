@@ -30,16 +30,33 @@ export let handler = async (yargs: any) => {
   let projectConfig = await readProjectConfig(configFileName);
 
   if (projectConfig.unitTest) {
-    test(projectPath);
-    coveralls(projectPath);
+    let mochapars = yargs.mochapars;
+    test(projectPath, mochapars);
+    coveralls(projectPath, mochapars);
   }
 };
 
-function test(projectPath: string) {
+function test(projectPath: string, mochapars: string) {
   printMessage("单元测试开始...");
 
   let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
   let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
+
+  let pars: Array<string> = [];
+
+  if (mochapars) {
+    mochapars = `{${mochapars
+      .replace(/[\"\'\{\}]/g, "")
+      .split(",")
+      .map(h => `"${h.replace(/:/g, '":"')}"`)
+      .join(",")}}`;
+
+    let mochaparsObj = JSON.parse(mochapars);
+    for (let k of Reflect.ownKeys(mochaparsObj)) {
+      pars.push(`--${k}`);
+      pars.push(Reflect.get(mochaparsObj, k));
+    }
+  }
 
   let options: SpawnSyncOptionsWithStringEncoding = {
     encoding: "utf8",
@@ -47,7 +64,7 @@ function test(projectPath: string) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
-  let childProcess = spawnSync(nyc, [mocha, "-t", "5000"], options);
+  let childProcess = spawnSync(nyc, [mocha, "-t", "5000"].concat(pars), options);
 
   if (childProcess.status !== 0) {
     printErrorMessage(childProcess.error.message);
@@ -59,7 +76,7 @@ function test(projectPath: string) {
   printMessage("单元测试成功结束");
 }
 
-function coveralls(projectPath: string) {
+function coveralls(projectPath: string, mochapars: string) {
   printMessage("覆盖率开始...");
 
   let nycrcFile = path.join(projectPath, ".nycrc");
