@@ -9,6 +9,7 @@ import { projectConfigFile } from "../common/const";
 import { getCreateProjectDependencies } from "../common/util";
 import { spawnSync, SpawnSyncOptionsWithStringEncoding, execSync } from "child_process";
 import { writeFileSync, unlinkSync } from "fs";
+import { IProjectConfig } from "../model/IProjectConfig";
 
 export let command = "test";
 export let desc = "单元测试";
@@ -23,11 +24,15 @@ export let builder = (yargs: Argv) => {
     .usage("Usage: $0 test -p .");
 };
 
-export let handler = (yargs: any) => {
+export let handler = async (yargs: any) => {
   let projectPath = path.resolve(yargs.p) || process.cwd();
-  test(projectPath);
+  let configFileName = path.join(projectPath, projectConfigFile);
+  let projectConfig = await readProjectConfig(configFileName);
 
-  coveralls(projectPath);
+  if (projectConfig.unitTest) {
+    test(projectPath);
+    coveralls(projectPath);
+  }
 };
 
 function test(projectPath: string) {
@@ -41,8 +46,6 @@ function test(projectPath: string) {
     cwd: projectPath,
     stdio: [process.stdin, process.stdout, process.stderr]
   };
-
-  console.log('test', mocha);
 
   let childProcess = spawnSync(nyc, [mocha, "-t", "5000"], options);
 
