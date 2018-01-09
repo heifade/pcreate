@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as browserify from "browserify";
 import { createWriteStream, unlinkSync, existsSync } from "fs";
-import { ProjectConfigModel } from "../model/projectConfig/ProjectConfigModel";
+import { ProjectConfigModel } from "pcreate-config";
 let tsify = require("tsify");
 
 export async function readProjectConfig(configFileName: string) {

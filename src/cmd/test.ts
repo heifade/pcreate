@@ -9,7 +9,7 @@ import { projectConfigFile } from "../common/const";
 import { getCreateProjectDependencies } from "../common/util";
 import { spawnSync, SpawnSyncOptionsWithStringEncoding, execSync } from "child_process";
 import { writeFileSync, unlinkSync } from "fs";
-import { ProjectConfigModel } from "../model/projectConfig/ProjectConfigModel";
+import { ProjectConfigModel } from "pcreate-config";
 
 export let command = "test";
 export let desc = "单元测试";

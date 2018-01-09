@@ -3,7 +3,6 @@ pcreate
 [![NPM version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
 [![Build Status](https://travis-ci.org/heifade/pcreate.svg?branch=master)](https://travis-ci.org/heifade/pcreate)
-[![Coverage Status](https://coveralls.io/repos/github/heifade/pcreate/badge.svg?branch=master)](https://coveralls.io/github/heifade/pcreate?branch=master)
 
 [npm-image]: https://img.shields.io/npm/v/pcreate.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/pcreate

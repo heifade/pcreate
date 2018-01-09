@@ -1,6 +1,6 @@
 import { iBuilder } from "./iBuilder";
 import * as path from "path";
-import { ProjectConfigModel } from "../../model/projectConfig/ProjectConfigModel";
+import { ProjectConfigModel } from "pcreate-config";
 import { readPackageJson } from "../../tools/readPackageJson";
 import { mkdirs } from "fs-i/es";
 import { writeFileSync } from "fs";

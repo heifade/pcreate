@@ -1,6 +1,6 @@
 import { asyncExec } from "../tools/asyncExec";
-import { ProjectConfigModel } from "../model/projectConfig/ProjectConfigModel";
-import { CompileModel } from "../model/projectConfig/CompileModel";
+import { ProjectConfigModel } from "pcreate-config";
+import { CompileModel } from "pcreate-config";
 import { getCreateProjectDependencies } from "./util";
 import * as path from "path";
 import { writeFileSync, unlinkSync } from "fs";

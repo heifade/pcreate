@@ -3,30 +3,7 @@ let zipi = require("zip-i");
 let fsi = require("fs-i");
 let path = require("path");
 
-/**
- * 复制IProjectConfig到template
- *
- */
-async function copyIProjectConfig() {
-  let rootPath = path.join(__dirname, "..");
-  let projectPath = path.join(rootPath, "template", "project");
 
-  let projectPathList = await fsi.getDirs(projectPath);
-  for (let project of projectPathList) {
-    //let modelPath = path.join(project, "src", "model");
-
-    //let fileName = "IProjectConfig.ts";
-    //let projectConfigFile = path.join(modelPath, fileName);
-
-    //fsi.mkdirsSync(modelPath);
-    //fs.copyFileSync(path.join(rootPath, "src", "model", fileName), projectConfigFile);
-
-    let sourcePath = path.join(rootPath, "src", "model", "projectConfig");
-    let targetPath = path.join(project, "src", "model", "projectConfig");
-
-    fs.copySync(sourcePath, targetPath, { overwrite: true, recursive: true });
-  }
-}
 
 /**
  * 从template/src中复制bin到template/es
@@ -65,7 +42,6 @@ async function copyTemplate() {
 }
 
 async function run(params) {
-  await copyIProjectConfig();
   await copyBin();
   await copyTemplate();
 }
