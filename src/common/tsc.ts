@@ -52,7 +52,7 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
       sourceMap: compile.sourceMap,
       noImplicitAny: compile.noImplicitAny,
       removeComments: true,
-      lib: ["esnext"],
+      lib: ["es2015"],
       types: ["node"]
     },
     include: sourceInclude
@@ -60,7 +60,9 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
 
   let tsConfigFile = path.join(projectPath, `tsconfig.json`);
 
-  writeFileSync(tsConfigFile, JSON.stringify(json, null, 2));
+  let tsConfigText = JSON.stringify(json, null, 2);
+
+  writeFileSync(tsConfigFile, tsConfigText);
 
   console.log(tsConfigFile);
 
