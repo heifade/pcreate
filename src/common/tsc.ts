@@ -4,19 +4,21 @@ import { CompileModel } from "pcreate-config";
 import { getCreateProjectDependencies } from "./util";
 import * as path from "path";
 import { writeFileSync, unlinkSync } from "fs";
+import { isArray, isObject } from "lodash";
 
 export async function compile(projectPath: string, projectConfig: ProjectConfigModel) {
-  let compile = projectConfig.compile;
+  let compile: any = projectConfig.compile;
   if (!compile) {
     return;
   }
-
-  if (compile instanceof CompileModel) {
-    await compileWithCompileModel(compile, projectConfig.sourceInclude, projectPath);
-  } else if (compile instanceof Array) {
+  if (isArray(compile)) {
+    console.log(1);
     for (let c of compile) {
       await compileWithCompileModel(c, projectConfig.sourceInclude, projectPath);
     }
+  } else if (isObject(compile)) {
+    console.log(2);
+    await compileWithCompileModel(compile, projectConfig.sourceInclude, projectPath);
   }
 }
 
@@ -50,7 +52,7 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
       sourceMap: compile.sourceMap,
       noImplicitAny: compile.noImplicitAny,
       removeComments: true,
-      lib: ["ES2015"],
+      lib: ["esnext"],
       types: ["node"]
     },
     include: sourceInclude
@@ -59,6 +61,8 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
   let tsConfigFile = path.join(projectPath, `tsconfig.json`);
 
   writeFileSync(tsConfigFile, JSON.stringify(json, null, 2));
+
+  console.log(tsConfigFile);
 
   await asyncExec("tsc", ["-p", tsConfigFile]);
 

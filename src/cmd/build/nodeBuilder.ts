@@ -6,7 +6,6 @@ import { mkdirs } from "fs-i/es";
 import { writeFileSync } from "fs";
 import { editPackageJson, getCreateProjectDependencies } from "../../common/util";
 import { asyncExec } from "../../tools/asyncExec";
-import { format } from "typedoc-format";
 import { printMessage } from "../../common/log";
 import { compile } from "../../common/tsc";
 
@@ -89,6 +88,7 @@ module.exports = require('../');
 
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
 
-    await format(docs);
+    let format = require('typedoc-format');
+    await format.format(docs);
   }
 }

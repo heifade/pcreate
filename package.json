@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta102",
+  "version": "1.0.0-beta103",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -49,6 +49,7 @@
     "fs-extra": "^5.0.0",
     "fs-i": "^1.0.9",
     "inquirer": "^5.0.0",
+    "lodash": "^4.17.4",
     "mocha": "^4.0.1",
     "nyc": "^11.3.0",
     "pcreate-config": "^1.0.7",
