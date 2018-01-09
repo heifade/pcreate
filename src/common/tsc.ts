@@ -50,7 +50,7 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
       sourceMap: compile.sourceMap,
       noImplicitAny: compile.noImplicitAny,
       removeComments: true,
-      lib: ["es2015"],
+      lib: ["ES2015"],
       types: ["node"]
     },
     include: sourceInclude
