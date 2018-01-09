@@ -30,6 +30,7 @@ export let handler = async (yargs: any) => {
     let configFileName = path.join(projectPath, projectConfigFile);
     let projectConfig = await readProjectConfig(configFileName);
 
+    rmdirSync(path.join(projectPath, "./lib"));
     rmdirSync(path.join(projectPath, "./es"));
     rmdirSync(path.join(projectPath, "./docs"));
 

@@ -9,20 +9,22 @@ let path = require("path");
  */
 async function copyIProjectConfig() {
   let rootPath = path.join(__dirname, "..");
-  let templatePath = path.join(rootPath, "template");
+  let projectPath = path.join(rootPath, "template", "project");
 
-  let subPathList = await fsi.getDirs(templatePath);
+  let projectPathList = await fsi.getDirs(projectPath);
+  for (let project of projectPathList) {
+    //let modelPath = path.join(project, "src", "model");
 
-  for (let subPath of subPathList) {
-    let subSubPathList = await fsi.getDirs(subPath);
-    for (let subSubPath of subSubPathList) {
-      let modelPath = path.join(subSubPath, "src", "model");
-      let fileName = "IProjectConfig.ts";
-      let projectConfigFile = path.join(modelPath, fileName);
+    //let fileName = "IProjectConfig.ts";
+    //let projectConfigFile = path.join(modelPath, fileName);
 
-      fsi.mkdirsSync(modelPath);
-      fs.copyFileSync(path.join(rootPath, "src", "model", fileName), projectConfigFile);
-    }
+    //fsi.mkdirsSync(modelPath);
+    //fs.copyFileSync(path.join(rootPath, "src", "model", fileName), projectConfigFile);
+
+    let sourcePath = path.join(rootPath, "src", "model", "projectConfig");
+    let targetPath = path.join(project, "src", "model", "projectConfig");
+
+    fs.copySync(sourcePath, targetPath, { overwrite: true, recursive: true });
   }
 }
 

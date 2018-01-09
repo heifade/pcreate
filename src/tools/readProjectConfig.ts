@@ -1,11 +1,11 @@
 import * as path from "path";
 import * as browserify from "browserify";
 import { createWriteStream, unlinkSync, existsSync } from "fs";
-import { IProjectConfig } from "../model/IProjectConfig";
+import { ProjectConfigModel } from "../model/projectConfig/ProjectConfigModel";
 let tsify = require("tsify");
 
 export async function readProjectConfig(configFileName: string) {
-  return new Promise<IProjectConfig>((resolve, reject) => {
+  return new Promise<ProjectConfigModel>((resolve, reject) => {
     if (!existsSync(configFileName)) {
       return reject(`缺少文件${configFileName}！`);
     }
@@ -47,7 +47,7 @@ export async function readProjectConfig(configFileName: string) {
 
         let file = require(targetFile);
 
-        let projectConfig = (file.default || file) as IProjectConfig;
+        let projectConfig = (file.default || file) as ProjectConfigModel;
 
         resolve(projectConfig);
         unlinkSync(targetFile);

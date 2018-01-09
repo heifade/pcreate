@@ -1,6 +1,6 @@
 import { iBuilder } from "./iBuilder";
 import * as path from "path";
-import { IProjectConfig } from "../../model/IProjectConfig";
+import { ProjectConfigModel } from "../../model/projectConfig/ProjectConfigModel";
 import { readPackageJson } from "../../tools/readPackageJson";
 import { mkdirs } from "fs-i/es";
 import { writeFileSync } from "fs";
@@ -8,11 +8,12 @@ import { editPackageJson, getCreateProjectDependencies } from "../../common/util
 import { asyncExec } from "../../tools/asyncExec";
 import { format } from "typedoc-format";
 import { printMessage } from "../../common/log";
+import { compile } from "../../common/tsc";
 
 export class NodeBuilder implements iBuilder {
-  public async run(projectPath: string, projectConfig: IProjectConfig) {
+  public async run(projectPath: string, projectConfig: ProjectConfigModel) {
     printMessage("正在将TypeScript编译成JavaScript...");
-    await asyncExec("tsc", ["-p", projectPath]);
+    await compile(projectPath, projectConfig);
 
     let packageJson = await readPackageJson(path.join(projectPath, "package.json"));
 
@@ -25,7 +26,7 @@ export class NodeBuilder implements iBuilder {
     }
   }
 
-  private async addCommand(projectPath: string, projectName: string, projectConfig: IProjectConfig) {
+  private async addCommand(projectPath: string, projectName: string, projectConfig: ProjectConfigModel) {
     printMessage("正在将程序处理成命令行...");
 
     // package.json
