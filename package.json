@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta108",
+  "version": "1.0.0-beta109",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -8,7 +8,7 @@
   "files": [
     "es"
   ],
-  "aaabin": {
+  "bin": {
     "pcreate": "./es/bin/pcreate",
     "pc": "./es/bin/pcreate"
   },

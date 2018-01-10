@@ -1,6 +1,7 @@
 let zipi = require("zip-i");
 let fsi = require("fs-i");
 let path = require("path");
+let fs = require("fs");
 
 
 
@@ -9,7 +10,9 @@ let path = require("path");
  *
  */
 async function copyBin() {
-  fsi.copySync("./src/bin", "./es/bin");
+  //fsi.copySync("./src/bin", "./es/bin");
+  fs.mkdirSync("./es");
+  copySync("./src/bin", "./es/bin");
 }
 
 /**
@@ -27,7 +30,9 @@ async function copyTemplate() {
 
     let targetPath = path.join(rootPath, "es", "template", path.basename(subPath));
 
+
     await fsi.mkdirs(targetPath);
+
 
     for (let subSubPath of subSubPathList) {
       let shortPathName = path.basename(subSubPath);
@@ -48,3 +53,44 @@ async function run(params) {
 run()
   .then()
   .catch();
+
+
+
+
+
+
+function copySync(sourceDir, targetDir, options) {
+  console.log(1);
+  if (fs.existsSync(sourceDir)) {
+    console.log(2);
+    if (fs.statSync(sourceDir).isDirectory()) {
+      // 源是目录
+      
+
+      console.log(3);
+
+
+
+      fs.mkdirSync(targetDir);
+
+      console.log(4);
+      
+
+      fs.readdirSync(sourceDir).forEach(file => {
+        let sourceFullName = path.join(sourceDir, file);
+        let targetFullName = path.join(targetDir, file);
+
+        copySync(sourceFullName, targetFullName, options);
+      });
+    } else {
+      // 源是文件
+
+      console.log(5);
+      
+      // 目标不存在
+      fs.copyFileSync(sourceDir, targetDir);
+    }
+  } else {
+    throw new Error(`${sourceDir} is not exists!`);
+  }
+}
