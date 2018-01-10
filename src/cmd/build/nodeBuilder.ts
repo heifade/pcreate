@@ -88,7 +88,7 @@ module.exports = require('../');
     let src = path.join(projectPath, "src");
     let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
 
-    await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
+    await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "ES2015"]);
 
     await format(docs);
   }
