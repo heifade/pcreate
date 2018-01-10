@@ -9,6 +9,7 @@ import { asyncExec } from "../../tools/asyncExec";
 import { printMessage } from "../../common/log";
 import { compile } from "../../common/tsc";
 import { format } from "typedoc-format";
+import { existsSync } from "fs-extra";
 
 export class NodeBuilder implements iBuilder {
   public async run(projectPath: string, projectConfig: ProjectConfigModel) {
@@ -87,6 +88,8 @@ module.exports = require('../');
     let docs = path.join(projectPath, "docs");
     let src = path.join(projectPath, "src");
     let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
+
+    console.log('typedoc', typedoc,  existsSync(typedoc));
 
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "ES2015"]);
 

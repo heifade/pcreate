@@ -54,9 +54,6 @@ export function getCreateProjectPath() {
  */
 export function getCreateProjectDependencies(projectPath: string, url: string) {
   let cmd = path.join(getCreateProjectPath(), "node_modules", url);
-
-  console.log('cmd', cmd);
-
   if (!existsSync(cmd)) {
     cmd = path.join(projectPath, "node_modules", url);
   }
