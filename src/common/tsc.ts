@@ -62,9 +62,6 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
 
   writeFileSync(tsConfigFile, tsConfigText);
 
-  console.log(tsConfigFile);
-  console.log(tsConfigText);
-
   
 
   await asyncExec("tsc", ["-p", 'tsconfig.json']);

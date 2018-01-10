@@ -8,10 +8,12 @@ import { editPackageJson, getCreateProjectDependencies } from "../../common/util
 import { asyncExec } from "../../tools/asyncExec";
 import { printMessage } from "../../common/log";
 import { compile } from "../../common/tsc";
+import { format } from "typedoc-format";
 
 export class NodeBuilder implements iBuilder {
   public async run(projectPath: string, projectConfig: ProjectConfigModel) {
     printMessage("正在将TypeScript编译成JavaScript...");
+
     await compile(projectPath, projectConfig);
 
     let packageJson = await readPackageJson(path.join(projectPath, "package.json"));
@@ -88,7 +90,6 @@ module.exports = require('../');
 
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator"]);
 
-    let format = require('typedoc-format');
-    await format.format(docs);
+    await format(docs);
   }
 }
