@@ -28,6 +28,7 @@ export let handler = async (yargs: any) => {
 
     let projectPath = path.resolve(yargs.p) || process.cwd();
     let configFileName = path.join(projectPath, projectConfigFile);
+
     let projectConfig = await readProjectConfig(configFileName);
 
     rmdirSync(path.join(projectPath, "./lib"));
