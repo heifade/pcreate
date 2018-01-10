@@ -50,7 +50,7 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
       sourceMap: compile.sourceMap,
       noImplicitAny: compile.noImplicitAny,
       removeComments: true,
-      lib: ["ES2015"],
+      lib: ["ESNEXT"],
       types: ["node"]
     },
     include: sourceInclude
@@ -65,7 +65,9 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
   console.log(tsConfigFile);
   console.log(tsConfigText);
 
-  await asyncExec("tsc", ["-p", tsConfigFile]);
+  
+
+  await asyncExec("tsc", ["-p", 'tsconfig.json']);
 
   unlinkSync(tsConfigFile);
 }
