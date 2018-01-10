@@ -1,4 +1,3 @@
-let fs = require("fs-extra");
 let zipi = require("zip-i");
 let fsi = require("fs-i");
 let path = require("path");
@@ -10,7 +9,7 @@ let path = require("path");
  *
  */
 async function copyBin() {
-  fs.copySync("./src/bin", "./es/bin");
+  fsi.copySync("./src/bin", "./es/bin");
 }
 
 /**

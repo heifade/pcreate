@@ -2,6 +2,7 @@ import * as path from "path";
 import { GlobalData } from "../model/globalData";
 import { readFileUtf8 } from "fs-i/es";
 import { writeFileSync, existsSync } from "fs";
+import * as fsExtra from "fs-extra";
 
 /**
  * 编辑package.json文件

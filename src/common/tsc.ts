@@ -12,12 +12,10 @@ export async function compile(projectPath: string, projectConfig: ProjectConfigM
     return;
   }
   if (isArray(compile)) {
-    console.log(1);
     for (let c of compile) {
       await compileWithCompileModel(c, projectConfig.sourceInclude, projectPath);
     }
   } else if (isObject(compile)) {
-    console.log(2);
     await compileWithCompileModel(compile, projectConfig.sourceInclude, projectPath);
   }
 }
