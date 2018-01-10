@@ -60,20 +60,15 @@ run()
 
 
 function copySync(sourceDir, targetDir, options) {
-  console.log(1);
   if (fs.existsSync(sourceDir)) {
-    console.log(2);
     if (fs.statSync(sourceDir).isDirectory()) {
       // 源是目录
       
-
-      console.log(3);
 
 
 
       fs.mkdirSync(targetDir);
 
-      console.log(4);
       
 
       fs.readdirSync(sourceDir).forEach(file => {
@@ -85,7 +80,6 @@ function copySync(sourceDir, targetDir, options) {
     } else {
       // 源是文件
 
-      console.log(5);
       
       // 目标不存在
       fs.copyFileSync(sourceDir, targetDir);

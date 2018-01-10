@@ -91,7 +91,7 @@ module.exports = require('../');
 
     console.log('typedoc', typedoc,  existsSync(typedoc));
 
-    await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "ES2015"]);
+    await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "lib.es2015.d.ts"]);
 
     await format(docs);
   }
