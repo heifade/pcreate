@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as browserify from "browserify";
-import { createWriteStream, unlinkSync, existsSync } from "fs";
+import { saveFileUtf8Sync, deleteFileSync, existsSync } from "fs-i";
 import { ProjectConfigModel } from "pcreate-config";
 let tsify = require("tsify");
 
@@ -12,8 +12,6 @@ export async function readProjectConfig(configFileName: string) {
 
     let targetFile = configFileName + Math.random() + ".js";
     try {
-      let fileWriter = createWriteStream(targetFile);
-
       // browserify()
       //   .add(configName)
       //   .plugin("tsify", { noImplicitAny: true, target: "es6" })
@@ -45,7 +43,7 @@ export async function readProjectConfig(configFileName: string) {
         let start = fileContent.indexOf("\n");
         let end = fileContent.lastIndexOf("\n");
 
-        fileWriter.write(fileContent.substring(start, end));
+        saveFileUtf8Sync(targetFile, fileContent.substring(start, end));
 
         let file = require(targetFile);
 
@@ -56,11 +54,11 @@ export async function readProjectConfig(configFileName: string) {
         console.log(12, projectConfig);
 
         resolve(projectConfig);
-        unlinkSync(targetFile);
+        deleteFileSync(targetFile);
       });
     } catch (e) {
       if (existsSync(targetFile)) {
-        unlinkSync(targetFile);
+        deleteFileSync(targetFile);
       }
       reject(e);
     }
