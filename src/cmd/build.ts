@@ -1,7 +1,7 @@
 import { Argv, Arguments } from "yargs";
 import { iBuilder } from "./build/iBuilder";
 import { rmdirSync } from "fs-i";
-import * as path from "path";
+import { join as pathJoin, resolve as pathResolve } from "path";
 import { readProjectConfig } from "../tools/readProjectConfig";
 import { NodeBuilder } from "./build/nodeBuilder";
 import { printMessage, printSuccessMessage, printErrorMessage } from "../common/log";
@@ -26,14 +26,14 @@ export let handler = async (yargs: any) => {
   try {
     let builder: iBuilder = null;
 
-    let projectPath = path.resolve(yargs.p) || process.cwd();
-    let configFileName = path.join(projectPath, projectConfigFile);
+    let projectPath = pathResolve(yargs.p) || process.cwd();
+    let configFileName = pathJoin(projectPath, projectConfigFile);
 
     let projectConfig = await readProjectConfig(configFileName);
 
-    rmdirSync(path.join(projectPath, "./lib"));
-    rmdirSync(path.join(projectPath, "./es"));
-    rmdirSync(path.join(projectPath, "./docs"));
+    rmdirSync(pathJoin(projectPath, "./lib"));
+    rmdirSync(pathJoin(projectPath, "./es"));
+    rmdirSync(pathJoin(projectPath, "./docs"));
 
     switch (projectConfig.projectType) {
       case "node":

@@ -1,4 +1,4 @@
-import * as path from "path";
+import {join as pathJoin} from "path";
 
 
 export class TemplateData {
@@ -9,10 +9,10 @@ export class TemplateData {
   }
 
   public static getProjectTemplate(subPath: string) {
-    return path.join(this.templatePath, 'project', subPath);
+    return pathJoin(this.templatePath, 'project', subPath);
   }
 
   public static getComponentPath(subPath: string) {
-    return path.join(this.templatePath, "component", subPath);
+    return pathJoin(this.templatePath, "component", subPath);
   }
 }

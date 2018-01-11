@@ -2,9 +2,10 @@ import { asyncExec } from "../tools/asyncExec";
 import { ProjectConfigModel } from "pcreate-config";
 import { CompileModel } from "pcreate-config";
 import { getCreateProjectDependencies } from "./util";
-import * as path from "path";
+import { join as pathJoin } from "path";
 import { writeFileSync, unlinkSync } from "fs";
 import { isArray, isObject } from "lodash";
+import { printMessage } from "./log";
 
 export async function compile(projectPath: string, projectConfig: ProjectConfigModel) {
   let compile: any = projectConfig.compile;
@@ -56,22 +57,15 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
     include: sourceInclude
   };
 
-  let tsConfigFile = path.join(projectPath, `tsconfig.json`);
+  let tsConfigFile = pathJoin(projectPath, `tsconfig.json`);
 
   let tsConfigText = JSON.stringify(json, null, 2);
 
   writeFileSync(tsConfigFile, tsConfigText);
 
-  
+  printMessage(`执行命令：tsc -p tsconfig.json`);
 
-  await asyncExec("tsc", ["-p", 'tsconfig.json']);
+  await asyncExec("tsc", ["-p", "tsconfig.json"]);
 
   unlinkSync(tsConfigFile);
 }
-
-// function addPar(pars: Array<string>, key: string, value: any) {
-//   if (value) {
-//     pars.push(`--${key}`);
-//     pars.push(value);
-//   }
-// }

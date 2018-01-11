@@ -31,10 +31,35 @@ export let handler = async (yargs: any) => {
 
   if (projectConfig.unitTest) {
     let mochapars = yargs.mochapars;
+    let nycrcFile = createNycrcFile(projectPath); //创建 .nycrc文件
     test(projectPath, mochapars);
     coveralls(projectPath, mochapars);
+    unlinkSync(nycrcFile); //删除 .nycrc文件
   }
 };
+
+// 创建 .nycrc文件
+function createNycrcFile(projectPath: string) {
+  let nycrcFile = path.join(projectPath, ".nycrc");
+
+  writeFileSync(
+    nycrcFile,
+    `{
+  "include": [
+    "src/**/*.ts"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "require": [
+    "ts-node/register"
+  ],
+  "sourceMap": true,
+  "instrument": true
+}`.trim()
+  );
+  return nycrcFile;
+}
 
 function test(projectPath: string, mochapars: string) {
   printMessage("单元测试开始...");
@@ -64,7 +89,9 @@ function test(projectPath: string, mochapars: string) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
-  let childProcess = spawnSync(nyc, [mocha, "-t", "5000"].concat(pars), options);
+  printMessage(`执行命令：${nyc} ${mocha} -t 10000`);
+
+  let childProcess = spawnSync(nyc, [mocha, "-t", "10000"].concat(pars), options);
 
   if (childProcess.status !== 0) {
     printErrorMessage(childProcess.error.message);
@@ -79,34 +106,15 @@ function test(projectPath: string, mochapars: string) {
 function coveralls(projectPath: string, mochapars: string) {
   printMessage("覆盖率开始...");
 
-  let nycrcFile = path.join(projectPath, ".nycrc");
-
-  writeFileSync(
-    nycrcFile,
-    `{
-  "include": [
-    "src/**/*.ts"
-  ],
-  "extension": [
-    ".ts"
-  ],
-  "require": [
-    "ts-node/register"
-  ],
-  "sourceMap": true,
-  "instrument": true
-}`.trim()
-  );
-
   let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
 
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
   let commandText = `"${nyc}" mocha -t 5000 && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
 
-  let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
+  printMessage(`执行命令：${commandText}`);
 
-  unlinkSync(nycrcFile);
+  let res = execSync(commandText, { encoding: "utf-8", cwd: projectPath });
 
   printMessage("覆盖率完成");
 }

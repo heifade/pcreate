@@ -33,7 +33,7 @@ let config: webpack.Configuration = {
     extensions: [".ts", ".js"]
   },
   externals: {
-    "fs-extra": "require('fs-extra')"
+    "fs-i": "require('fs-i')"
   },
 
   plugins: [

@@ -9,7 +9,6 @@ import { asyncExec } from "../../tools/asyncExec";
 import { printMessage } from "../../common/log";
 import { compile } from "../../common/tsc";
 import { format } from "typedoc-format";
-import { existsSync } from "fs-extra";
 
 export class NodeBuilder implements iBuilder {
   public async run(projectPath: string, projectConfig: ProjectConfigModel) {
@@ -89,10 +88,7 @@ module.exports = require('../');
     let src = path.join(projectPath, "src");
     let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
 
-    // await asyncExec('npm', ["install", "typedoc"], {cwd: projectPath});
-    // let typedoc = path.join(projectPath, "node_modules", "typedoc", "bin", "typedoc");
-
-    //console.log('typedoc', typedoc,  existsSync(typedoc));
+    printMessage(`执行命令：${typedoc} --out ${docs} ${src} --module commonjs --hideGenerator --lib lib.es6.d.ts`);
 
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "lib.es6.d.ts"]);
 
