@@ -93,6 +93,7 @@ function test(projectPath: string, mochapars: string[]) {
   let childProcess = spawnSync(nyc, [mocha].concat(mochapars), options);
 
   if (childProcess.status !== 0) {
+    console.log('222', childProcess.stderr, childProcess.error);
     printErrorMessage(childProcess.error.message);
     printErrorMessage("单元测试不通过！");
     process.exit(childProcess.status);
