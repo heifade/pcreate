@@ -69,12 +69,16 @@ function test(projectPath: string, mochapars: string) {
 
   let pars: Array<string> = [];
 
+
+
   if (mochapars) {
     mochapars = `{${mochapars
       .replace(/[\"\'\{\}]/g, "")
       .split(",")
       .map(h => `"${h.replace(/:/g, '":"')}"`)
       .join(",")}}`;
+
+    console.log(`mocha参数：${mochapars}`);
 
     let mochaparsObj = JSON.parse(mochapars);
     for (let k of Reflect.ownKeys(mochaparsObj)) {
@@ -89,7 +93,7 @@ function test(projectPath: string, mochapars: string) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
-  printMessage(`执行命令：${nyc} ${mocha} -t 10000`);
+  printMessage(`执行命令：${nyc} ${mocha} -t 10000 ${pars.join(' ')}`);
 
   let childProcess = spawnSync(nyc, [mocha, "-t", "10000"].concat(pars), options);
 
