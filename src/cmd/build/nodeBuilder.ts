@@ -87,10 +87,10 @@ module.exports = require('../');
     printMessage("正在生成文档...");
     let docs = path.join(projectPath, "docs");
     let src = path.join(projectPath, "src");
-    // let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
+    let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
 
-    await asyncExec('npm', ["install", "typedoc"], {cwd: projectPath});
-    let typedoc = path.join(projectPath, "node_modules", "typedoc", "bin", "typedoc");
+    // await asyncExec('npm', ["install", "typedoc"], {cwd: projectPath});
+    // let typedoc = path.join(projectPath, "node_modules", "typedoc", "bin", "typedoc");
 
     //console.log('typedoc', typedoc,  existsSync(typedoc));
 
