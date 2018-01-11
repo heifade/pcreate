@@ -1,5 +1,5 @@
 import { iBuilder } from "./iBuilder";
-import * as path from "path";
+import { join as pathJoin } from "path";
 import { ProjectConfigModel } from "pcreate-config";
 import { readPackageJson } from "../../tools/readPackageJson";
 import { mkdirs } from "fs-i/es";
@@ -16,7 +16,7 @@ export class NodeBuilder implements iBuilder {
 
     await compile(projectPath, projectConfig);
 
-    let packageJson = await readPackageJson(path.join(projectPath, "package.json"));
+    let packageJson = await readPackageJson(pathJoin(projectPath, "package.json"));
 
     if (projectConfig.command) {
       await this.addCommand(projectPath, packageJson.name, projectConfig);
@@ -57,11 +57,11 @@ export class NodeBuilder implements iBuilder {
     });
 
     // bin
-    let binPath = path.join(projectPath, "es", "bin");
+    let binPath = pathJoin(projectPath, "es", "bin");
     await mkdirs(binPath);
 
     writeFileSync(
-      path.join(binPath, `${projectName}`),
+      pathJoin(binPath, `${projectName}`),
       `
 #!/usr/bin/env node
 module.exports = require('../');
@@ -69,7 +69,7 @@ module.exports = require('../');
     );
 
     writeFileSync(
-      path.join(binPath, `${projectName}.cmd`),
+      pathJoin(binPath, `${projectName}.cmd`),
       `
 @IF EXIST "%~dp0\\node.exe" (
   "%~dp0\\node.exe"  "%~dp0\\..\\${projectName}\\bin\\${projectName}" %*
@@ -84,9 +84,9 @@ module.exports = require('../');
 
   private async buildDocs(projectPath: string) {
     printMessage("正在生成文档...");
-    let docs = path.join(projectPath, "docs");
-    let src = path.join(projectPath, "src");
-    let typedoc = getCreateProjectDependencies(projectPath, path.join("typedoc", "bin", "typedoc"));
+    let docs = pathJoin(projectPath, "docs");
+    let src = pathJoin(projectPath, "src");
+    let typedoc = getCreateProjectDependencies(projectPath, pathJoin("typedoc", "bin", "typedoc"));
 
     printMessage(`执行命令：${typedoc} --out ${docs} ${src} --module commonjs --hideGenerator --lib lib.es6.d.ts`);
 

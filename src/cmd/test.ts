@@ -1,7 +1,7 @@
 import { Argv, Arguments } from "yargs";
 import { iBuilder } from "./build/iBuilder";
 import { rmdirSync } from "fs-i";
-import * as path from "path";
+import { join as pathJoin, resolve as pathResolve} from "path";
 import { readProjectConfig } from "../tools/readProjectConfig";
 import { NodeBuilder } from "./build/nodeBuilder";
 import { printMessage, printSuccessMessage, printErrorMessage } from "../common/log";
@@ -25,8 +25,8 @@ export let builder = (yargs: Argv) => {
 };
 
 export let handler = async (yargs: any) => {
-  let projectPath = path.resolve(yargs.p) || process.cwd();
-  let configFileName = path.join(projectPath, projectConfigFile);
+  let projectPath = pathResolve(yargs.p) || process.cwd();
+  let configFileName = pathJoin(projectPath, projectConfigFile);
   let projectConfig = await readProjectConfig(configFileName);
 
   if (projectConfig.unitTest) {
@@ -55,7 +55,7 @@ function getMochapars(mochapars: string) {
 
 // 创建 .nycrc文件
 function createNycrcFile(projectPath: string) {
-  let nycrcFile = path.join(projectPath, ".nycrc");
+  let nycrcFile = pathJoin(projectPath, ".nycrc");
 
   writeFileSync(
     nycrcFile,
@@ -79,8 +79,8 @@ function createNycrcFile(projectPath: string) {
 function test(projectPath: string, mochapars: string[]) {
   printMessage("单元测试开始...");
 
-  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
-  let mocha = getCreateProjectDependencies(projectPath, path.join("mocha", "bin", "mocha"));
+  let nyc = getCreateProjectDependencies(projectPath, pathJoin("nyc", "bin", "nyc.js"));
+  let mocha = getCreateProjectDependencies(projectPath, pathJoin("mocha", "bin", "mocha"));
 
   let options: SpawnSyncOptionsWithStringEncoding = {
     encoding: "utf8",
@@ -105,9 +105,9 @@ function test(projectPath: string, mochapars: string[]) {
 function coveralls(projectPath: string, mochapars: string[]) {
   printMessage("覆盖率开始...");
 
-  let nyc = getCreateProjectDependencies(projectPath, path.join("nyc", "bin", "nyc.js"));
+  let nyc = getCreateProjectDependencies(projectPath, pathJoin("nyc", "bin", "nyc.js"));
 
-  let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
+  let coveralls = getCreateProjectDependencies(projectPath, pathJoin("coveralls", "bin", "coveralls.js"));
 
   let commandText = `"${nyc}" mocha ${mochapars.join(" ")} && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
 
