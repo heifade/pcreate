@@ -1,7 +1,7 @@
 import { Argv, Arguments } from "yargs";
 import { iBuilder } from "./build/iBuilder";
 import { rmdirSync } from "fs-i";
-import { join as pathJoin, resolve as pathResolve} from "path";
+import { join as pathJoin, resolve as pathResolve } from "path";
 import { readProjectConfig } from "../tools/readProjectConfig";
 import { NodeBuilder } from "./build/nodeBuilder";
 import { printMessage, printSuccessMessage, printErrorMessage } from "../common/log";
@@ -93,8 +93,13 @@ function test(projectPath: string, mochapars: string[]) {
   let childProcess = spawnSync(nyc, [mocha].concat(mochapars), options);
 
   if (childProcess.status !== 0) {
-    console.log('222', childProcess.stderr, childProcess.error);
-    printErrorMessage(childProcess.error.message);
+    if (childProcess.error && childProcess.error.message) {
+      printErrorMessage(childProcess.error.message);
+    }
+    if (childProcess.stderr) {
+      printErrorMessage(childProcess.stderr);
+    }
+
     printErrorMessage("单元测试不通过！");
     process.exit(childProcess.status);
     return;
