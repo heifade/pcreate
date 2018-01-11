@@ -30,11 +30,10 @@ export let handler = async (yargs: any) => {
   let projectConfig = await readProjectConfig(configFileName);
 
   if (projectConfig.unitTest) {
-    let mochapars = getMochapars(yargs.mochapars);
-
+    let mochapars = getMochapars(yargs.mochapars); //解析给mocha传的参数
     let nycrcFile = createNycrcFile(projectPath); //创建 .nycrc文件
-    test(projectPath, mochapars);
-    coveralls(projectPath, mochapars);
+    test(projectPath, mochapars); //单元测试
+    coveralls(projectPath, mochapars); //覆盖率
     unlinkSync(nycrcFile); //删除 .nycrc文件
   }
 };
@@ -89,13 +88,13 @@ function test(projectPath: string, mochapars: string[]) {
     stdio: [process.stdin, process.stdout, process.stderr]
   };
 
-  printMessage(`执行命令：${nyc} ${mocha} -t 10000 ${mochapars.join(" ")}`);
+  printMessage(`执行命令：${nyc} ${mocha} ${mochapars.join(" ")}`);
 
-  let childProcess = spawnSync(nyc, [mocha, "-t", "10000"].concat(mochapars), options);
+  let childProcess = spawnSync(nyc, [mocha].concat(mochapars), options);
 
   if (childProcess.status !== 0) {
     printErrorMessage(childProcess.error.message);
-    printErrorMessage("单元测试失败！");
+    printErrorMessage("单元测试不通过！");
     process.exit(childProcess.status);
     return;
   }
@@ -110,7 +109,7 @@ function coveralls(projectPath: string, mochapars: string[]) {
 
   let coveralls = getCreateProjectDependencies(projectPath, path.join("coveralls", "bin", "coveralls.js"));
 
-  let commandText = `"${nyc}" mocha -t 5000 ${mochapars.join(" ")} && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
+  let commandText = `"${nyc}" mocha ${mochapars.join(" ")} && "${nyc}" report --reporter=text-lcov | "${coveralls}"`;
 
   printMessage(`执行命令：${commandText}`);
 
