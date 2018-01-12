@@ -79,7 +79,7 @@ node_js:
   - "8"
 before_script:
   - npm i pcreate
-  - pcreate test
+  - pcreate test -c
 script:
   - pcreate build
 after_script:
