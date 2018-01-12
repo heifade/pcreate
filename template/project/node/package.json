@@ -9,14 +9,16 @@
     "es"
   ],
   "devDependencies": {
-    "pcreate-config": "^1.1.1"
+    "pcreate-config": "^1.1.1",
+    "@types/node": "^9.3.0"
   },
   "dependencies": {
     
   },
   "scripts": {
     "build": "pcreate build",
-    "start": "pcreate build && node ./es/index.js"
+    "start": "pcreate build && node ./es/index.js",
+    "test": "pcreate test"
   },
   "keywords": [
     "{{projectName}}"
