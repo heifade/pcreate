@@ -58,40 +58,11 @@ export class NodeProj extends BaseProj {
 
   private async addDocs() {
     // package.json
-    await editPackageJson(GlobalData.projectRootPath, json => {
-      
-    });
-  }
-  private async addUnitTest() {
-    // package.json
-    await editPackageJson(GlobalData.projectRootPath, json => {
-      Object.assign(json.devDependencies, {
-        "@types/chai": "^4.0.5",
-        chai: "^4.1.2",
-        "@types/mocha": "^2.2.44",
-        mocha: "^4.0.1",
-      });
-    });
+    await editPackageJson(GlobalData.projectRootPath, json => {});
 
     // .travis.yml
     {
       await editFile(path.join(GlobalData.projectRootPath, ".travis.yml"), fileContent => {
-        fileContent = fileContent.replace(/\nscript\s*:/, (w, a, b, c, d) => {
-          return (
-            w +
-            `
-  - pcreate test`
-          );
-        });
-
-  //       fileContent = fileContent.replace(/after_script\s*:/, (w, a, b, c, d) => {
-  //         return (
-  //           w +
-  //           `
-  // - npm run test-nyc`
-  //         );
-  //       });
-
         fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
           return (
             w +
@@ -108,42 +79,16 @@ export class NodeProj extends BaseProj {
         return fileContent;
       });
     }
-
-    // test js
-    {
-      let testPath = path.join(GlobalData.projectRootPath, "test");
-      await mkdirs(testPath);
-
-      writeFileSync(
-        path.join(testPath, "mocha.opts"),
-        `
---require ts-node/register
---require source-map-support/register
---full-trace
---bail
-test/**/*.test.ts
-        `.trim()
-      );
-
-      writeFileSync(
-        path.join(testPath, "index.test.ts"),
-        `
-import { expect } from "chai";
-import "mocha";
-import { add } from "../src/index";
-
-describe("index", function() {
-  before(async () => {});
-  after(async () => {});
-
-  it("add should be success", async () => {
-    expect(add(1, 2)).to.equal(3);
-  });
-});   
-      `.trim()
-      );
-    }
   }
-
-  
+  private async addUnitTest() {
+    // package.json
+    await editPackageJson(GlobalData.projectRootPath, json => {
+      Object.assign(json.devDependencies, {
+        "@types/chai": "^4.1.0",
+        chai: "^4.1.2",
+        "@types/mocha": "^2.2.46",
+        mocha: "^4.1.0"
+      });
+    });
+  }
 }

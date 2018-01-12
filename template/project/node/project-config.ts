@@ -1,10 +1,18 @@
-import { IProjectConfig } from './src/model/IProjectConfig';
+import { ProjectConfigModel } from "pcreate-config";
 
-
-let projectConfig: IProjectConfig = {
-  projectType: 'node',
-  command: true,
-
-}
+let projectConfig: ProjectConfigModel = {
+  projectType: "node",
+  compile: {
+    outDir: "./es/",
+    module: "commonjs",
+    target: "es5",
+    lib: ["es2015", "es2015.promise", "es2015.symbol"],
+    declaration: true
+  },
+  command: false,
+  documents: false,
+  unitTest: false,
+  sourceInclude: ["./src/**/*"]
+};
 
 export default projectConfig;
