@@ -15,8 +15,8 @@
     
   },
   "scripts": {
-    "build": "pc build",
-    "start": "pc build && node ./es/index.js"
+    "build": "pcreate build",
+    "start": "pcreate build && node ./es/index.js"
   },
   "keywords": [
     "{{projectName}}"

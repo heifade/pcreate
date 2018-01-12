@@ -1,12 +1,13 @@
 import { BaseProj } from "./baseProj";
 import { Questions } from "inquirer";
-import { mkdirs } from "fs-i";
+import { mkdirs, saveFileUtf8Sync } from "fs-i";
 import { GlobalData } from "../../../model/globalData";
 import * as path from "path";
 import { unzipPath } from "zip-i";
 import { editPackageJson, editFile } from "../../../common/util";
 import { writeFileSync } from "fs";
 import { TemplateData } from "../../../common/template";
+import { ProjectType, getProjectTypeName } from "../../../model/ProjectType";
 
 export class NodeProj extends BaseProj {
   getQuestions() {
@@ -51,34 +52,13 @@ export class NodeProj extends BaseProj {
       this.addUnitTest();
     }
 
-    // if (answer.isCommand === "是") {
-    //   this.addCommand();
-    // }
+    this.createYml(answer);
+    this.createProjectConfig(answer);
   }
 
   private async addDocs() {
     // package.json
     await editPackageJson(GlobalData.projectRootPath, json => {});
-
-    // .travis.yml
-    {
-      await editFile(path.join(GlobalData.projectRootPath, ".travis.yml"), fileContent => {
-        fileContent = fileContent.replace(/deploy\s*:/, (w, a, b, c, d) => {
-          return (
-            w +
-            `
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    local_dir: docs
-    on:
-      branch: master
-  `
-          );
-        });
-        return fileContent;
-      });
-    }
   }
   private async addUnitTest() {
     // package.json
@@ -90,5 +70,70 @@ export class NodeProj extends BaseProj {
         mocha: "^4.1.0"
       });
     });
+  }
+  private async createYml(answer: any) {
+    let fileContent = `
+language: node_js
+sudo: enabled
+node_js:
+  - "8"
+before_script:
+  - npm i pcreate
+  - pcreate test
+script:
+  - pcreate build
+after_script:
+
+cache:
+  directories:
+    - node_modules
+
+deploy:
+  - provider: npm
+    skip_cleanup: true
+    email: heifade@126.com
+    api_key: $NPM_TOKEN
+    on:
+      branch: master
+      repo: heifade/${GlobalData.projectName}
+  ${
+    answer.needDocs
+      ? `
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: docs
+    on:
+      branch: master`.trim()
+      : ""
+  }
+`;
+
+    saveFileUtf8Sync(path.join(GlobalData.projectRootPath, ".travis.yml"), fileContent);
+  }
+
+  private async createProjectConfig(answer: any) {
+    let fileContent = `
+import { ProjectConfigModel } from "pcreate-config";
+
+let projectConfig: ProjectConfigModel = {
+  projectType: "${getProjectTypeName(GlobalData.projectType)}",
+  compile: {
+    outDir: "./es/",
+    module: "commonjs",
+    target: "es5",
+    lib: ["es2015", "es2015.promise", "es2015.symbol"],
+    declaration: true
+  },
+  command: ${answer.isCommand === "是" ? "true" : "false"},
+  documents: ${answer.needDocs === "是" ? "true" : "false"},
+  unitTest: ${answer.unittest === "是" ? "true" : "false"},
+  sourceInclude: ["./src/**/*"]
+};
+
+export default projectConfig;
+    `;
+
+    saveFileUtf8Sync(path.join(GlobalData.projectRootPath, "project-config.ts"), fileContent);
   }
 }

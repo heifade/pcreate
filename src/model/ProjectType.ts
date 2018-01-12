@@ -4,6 +4,17 @@ export enum ProjectType {
   angular
 }
 
+export function getProjectTypeName(projectType: ProjectType) {
+  switch (projectType) {
+    case ProjectType.node:
+      return "node";
+    case ProjectType.webpack:
+      return "webpack";
+    case ProjectType.angular:
+      return "angular";
+  }
+}
+
 export function newProjectType(typeName: string) {
   switch (typeName) {
     case "node":
