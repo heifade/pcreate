@@ -21,7 +21,13 @@ export let builder = (yargs: Argv) => {
       default: ".",
       type: "string"
     })
-    .usage("Usage: $0 test -p .");
+    .option("c", {
+      alias: "coveralls",
+      describe: "覆盖率",
+      default: false,
+      type: "boolean"
+    })
+    .usage("Usage: $0 test -p . -c");
 };
 
 export let handler = async (yargs: any) => {
@@ -33,7 +39,11 @@ export let handler = async (yargs: any) => {
     let mochapars = getMochapars(yargs.mochapars); //解析给mocha传的参数
     let nycrcFile = createNycrcFile(projectPath); //创建 .nycrc文件
     test(projectPath, mochapars); //单元测试
-    coveralls(projectPath, mochapars); //覆盖率
+
+    if (yargs.c) {
+      coveralls(projectPath, mochapars); //覆盖率
+    }
+
     unlinkSync(nycrcFile); //删除 .nycrc文件
   }
 };
