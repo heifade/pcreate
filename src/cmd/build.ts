@@ -5,7 +5,7 @@ import { join as pathJoin, resolve as pathResolve } from "path";
 import { readProjectConfig } from "../tools/readProjectConfig";
 import { NodeBuilder } from "./build/nodeBuilder";
 import { printMessage, printSuccessMessage, printErrorMessage } from "../common/log";
-import { projectConfigFile } from '../common/const';
+import { projectConfigFile } from "../common/const";
 import { readPackageJson } from "../tools/readPackageJson";
 
 export let command = "build";
@@ -21,23 +21,14 @@ export let builder = (yargs: Argv) => {
     .usage("Usage: $0 build -p .");
 };
 
-async function readPackage(index: number, projectPath: string) {
-  let packageJson = await readPackageJson(pathJoin(projectPath, "package.json"));
-  console.log('build1,package.json', JSON.stringify(packageJson));
-}
-
 export let handler = async (yargs: any) => {
   printMessage("构建开始...");
-
-  
 
   try {
     let builder: iBuilder = null;
 
     let projectPath = pathResolve(yargs.p) || process.cwd();
     let configFileName = pathJoin(projectPath, projectConfigFile);
-
-    readPackage(1, projectPath);
 
     let projectConfig = await readProjectConfig(configFileName);
 

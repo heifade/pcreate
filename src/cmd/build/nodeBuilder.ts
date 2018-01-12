@@ -2,7 +2,7 @@ import { iBuilder } from "./iBuilder";
 import { join as pathJoin } from "path";
 import { ProjectConfigModel } from "pcreate-config";
 import { readPackageJson } from "../../tools/readPackageJson";
-import { mkdirs } from "fs-i/es";
+import { mkdirs, deleteFile } from "fs-i/es";
 import { writeFileSync } from "fs";
 import { editPackageJson, getCreateProjectDependencies } from "../../common/util";
 import { asyncExec } from "../../tools/asyncExec";
@@ -25,6 +25,8 @@ export class NodeBuilder implements iBuilder {
     if (projectConfig.documents) {
       await this.buildDocs(projectPath);
     }
+
+    await this.removeDependencies(projectPath);
   }
 
   private async addCommand(projectPath: string, projectName: string, projectConfig: ProjectConfigModel) {
@@ -93,5 +95,16 @@ module.exports = require('../');
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "lib.es6.d.ts"]);
 
     await format(docs);
+  }
+
+  private async removeDependencies(projectPath: string) {
+    await editPackageJson(projectPath, json => {
+      if (json.dependencies) {
+        delete json.dependencies.pcreate;
+      }
+      if (json.devDependencies) {
+        delete json.devDependencies.pcreate;
+      }
+    });
   }
 }
