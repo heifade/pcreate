@@ -9,7 +9,7 @@
     "es"
   ],
   "devDependencies": {
-    "typescript": "^2.6.1"
+    
   },
   "dependencies": {
     "@types/node": "^8.5.2"
