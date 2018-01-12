@@ -14,32 +14,17 @@ export class NodeBuilder implements iBuilder {
   public async run(projectPath: string, projectConfig: ProjectConfigModel) {
     printMessage("正在将TypeScript编译成JavaScript...");
 
-    await this.readPackage('1', projectPath);
-
     await compile(projectPath, projectConfig);
 
-    await this.readPackage('2', projectPath);
-
     let packageJson = await readPackageJson(pathJoin(projectPath, "package.json"));
-
-    await this.readPackage('3', projectPath);
 
     if (projectConfig.command) {
       await this.addCommand(projectPath, packageJson.name, projectConfig);
     }
 
-    await this.readPackage('4', projectPath);
-
     if (projectConfig.documents) {
       await this.buildDocs(projectPath);
     }
-
-    await this.readPackage('5', projectPath);
-  }
-
-  private async readPackage(index: string, projectPath: string) {
-    let packageJson = await readPackageJson(pathJoin(projectPath, "package.json"));
-    console.log(`${index},build,package.json`, JSON.stringify(packageJson));
   }
 
   private async addCommand(projectPath: string, projectName: string, projectConfig: ProjectConfigModel) {
