@@ -35,6 +35,7 @@ export class NodeBuilder implements iBuilder {
     // package.json
     await editPackageJson(projectPath, json => {
       if (typeof projectConfig.command === "boolean") {
+        //当command为boolean时，此时值一定是true，因为上面已经判断过：false的不会进这里
         Object.assign(json, {
           bin: {
             [projectName]: `./es/bin/${projectName}`
@@ -56,6 +57,19 @@ export class NodeBuilder implements iBuilder {
           bin: binNode
         });
       }
+
+      if (json.devDependencies === null || json.devDependencies === undefined) {
+        json.devDependencies = {};
+      }
+
+      Object.assign(json.devDependencies, {
+        "@types/chai": "^4.1.0",
+        "@types/mocha": "^2.2.46",
+        chai: "^4.1.2",
+        chalk: "^2.3.0",
+        mocha: "^4.1.0",
+        yargs: "^10.1.1"
+      });
     });
 
     // bin
