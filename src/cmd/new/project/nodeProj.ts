@@ -80,8 +80,7 @@ export class NodeProj extends BaseProj {
     await editPackageJson(GlobalData.projectRootPath, json => {
       Object.assign(json.dependencies, {
         chalk: "^2.3.0",
-        yargs: "^10.1.1",
-        child_process: "^1.0.2"
+        yargs: "^10.1.1"
       });
     });
   }
