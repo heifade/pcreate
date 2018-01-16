@@ -57,19 +57,6 @@ export class NodeBuilder implements iBuilder {
           bin: binNode
         });
       }
-
-      if (json.devDependencies === null || json.devDependencies === undefined) {
-        json.devDependencies = {};
-      }
-
-      Object.assign(json.devDependencies, {
-        "@types/chai": "^4.1.0",
-        "@types/mocha": "^2.2.46",
-        chai: "^4.1.2",
-        chalk: "^2.3.0",
-        mocha: "^4.1.0",
-        yargs: "^10.1.1"
-      });
     });
 
     // bin

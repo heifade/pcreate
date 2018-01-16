@@ -52,6 +52,10 @@ export class NodeProj extends BaseProj {
       this.addUnitTest();
     }
 
+    if (answer.isCommand === "是") {
+      this.addCommand();
+    }
+
     this.createYml(answer);
     this.createProjectConfig(answer);
   }
@@ -68,6 +72,15 @@ export class NodeProj extends BaseProj {
         chai: "^4.1.2",
         "@types/mocha": "^2.2.46",
         mocha: "^4.1.0"
+      });
+    });
+  }
+  private async addCommand() {
+    // package.json
+    await editPackageJson(GlobalData.projectRootPath, json => {
+      Object.assign(json.devDependencies, {
+        chalk: "^2.3.0",
+        yargs: "^10.1.1"
       });
     });
   }
