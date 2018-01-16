@@ -110,7 +110,7 @@ deploy:
       branch: master
       repo: heifade/${GlobalData.projectName}
   ${
-    answer.needDocs
+    answer.needDocs === "是"
       ? `
   - provider: pages
     skip_cleanup: true
