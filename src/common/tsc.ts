@@ -6,6 +6,9 @@ import { join as pathJoin } from "path";
 import { writeFileSync, unlinkSync } from "fs";
 import { isArray, isObject } from "lodash";
 import { printMessage } from "./log";
+import { existsSync } from "fs-i/es/path";
+import * as shell from "shelljs";
+import { shellExecSync } from "../tools/shellExec";
 
 export async function compile(projectPath: string, projectConfig: ProjectConfigModel) {
   let compile: any = projectConfig.compile;
@@ -65,7 +68,8 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
 
   printMessage(`执行命令：tsc -p tsconfig.json`);
 
-  await asyncExec("tsc", ["-p", "tsconfig.json"]);
+  shellExecSync(`tsc -p tsconfig.json`, projectPath);
+
 
   unlinkSync(tsConfigFile);
 }

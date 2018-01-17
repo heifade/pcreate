@@ -1,0 +1,21 @@
+import * as shell from "shelljs";
+import { printMessage, printErrorMessage } from "../common/log";
+
+export function shellExecSync(command: string, cwd: string) {
+	try {
+		printMessage(`执行命令：${command}`);
+		let c = shell.exec(command, { cwd, async: false });
+		if (c.stderr) {
+			printErrorMessage(c.stdout.toString());
+			return false;
+		}
+		if (c.stdout) {
+			printMessage(c.stdout.toString());
+		}
+		return true;
+	}
+	catch (e) {
+		console.log(`shell.exec(${command})`, e);
+		return false;
+	}
+}
