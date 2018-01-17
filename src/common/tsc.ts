@@ -1,13 +1,9 @@
-import { asyncExec } from "../tools/asyncExec";
 import { ProjectConfigModel } from "pcreate-config";
 import { CompileModel } from "pcreate-config";
 import { getCreateProjectDependencies } from "./util";
 import { join as pathJoin } from "path";
 import { writeFileSync, unlinkSync } from "fs";
 import { isArray, isObject } from "lodash";
-import { printMessage } from "./log";
-import { existsSync } from "fs-i/es/path";
-import * as shell from "shelljs";
 import { shellExecSync } from "../tools/shellExec";
 
 export async function compile(projectPath: string, projectConfig: ProjectConfigModel) {
@@ -66,10 +62,7 @@ async function compileWithCompileModel(compile: CompileModel, sourceInclude: str
 
   writeFileSync(tsConfigFile, tsConfigText);
 
-  printMessage(`执行命令：tsc -p tsconfig.json`);
-
   shellExecSync(`tsc -p tsconfig.json`, projectPath);
-
 
   unlinkSync(tsConfigFile);
 }

@@ -92,7 +92,6 @@ module.exports = require('../');
     let typedoc = getCreateProjectDependencies(projectPath, pathJoin("typedoc", "bin", "typedoc"));
 
     printMessage(`执行命令：${typedoc} --out ${docs} ${src} --module commonjs --hideGenerator --lib lib.es6.d.ts`);
-
     await asyncExec(typedoc, ["--out", docs, src, "--module", "commonjs", "--hideGenerator", "--lib", "lib.es6.d.ts"]);
 
     await format(docs);
