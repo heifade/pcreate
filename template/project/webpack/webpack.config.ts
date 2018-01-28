@@ -1,13 +1,13 @@
-import * as webpack from "webpack";
-import * as path from "path";
+import { Configuration, optimize } from "webpack";
+import { resolve as pathResolve } from "path";
 
-let config: webpack.Configuration = {
+let config: Configuration = {
   entry: {
     index: "./src/index.ts"
   },
   output: {
-    path: path.resolve(__dirname, "es"),
-    filename: "[name].js"
+    // path: pathResolve(__dirname, "es"),
+    filename: "./es/[name].js"
   },
   module: {
     rules: [
@@ -28,22 +28,8 @@ let config: webpack.Configuration = {
       }
     ]
   },
-  target: "node",
-  resolve: {
-    extensions: [".ts", ".js"]
-  },
-  externals: {
-    "fs-i": "require('fs-i')"
-  },
-
   plugins: [
-    // 构建优化插件
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: "v",
-    //   filename: "v.min.js"
-    // }),
-    //
-    new webpack.optimize.UglifyJsPlugin({
+    new optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
         drop_console: false
