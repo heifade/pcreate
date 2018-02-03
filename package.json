@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta151",
+  "version": "1.0.0-beta152",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -30,31 +30,31 @@
   "author": "heifade",
   "license": "MIT",
   "dependencies": {
-    "browserify": "^15.1.0",
+    "browserify": "^15.2.0",
     "chalk": "^2.3.0",
     "coveralls": "^3.0.0",
     "fs-i": "^1.2.2",
-    "inquirer": "^5.0.0",
+    "inquirer": "^5.0.1",
     "lodash": "^4.17.4",
-    "mocha": "^4.1.0",
+    "mocha": "^5.0.0",
     "nyc": "^11.4.1",
     "pcreate-config": "^1.1.2",
-    "shelljs": "^0.8.0",
+    "shelljs": "^0.8.1",
     "ts-node": "^4.1.0",
     "tsify": "^3.0.4",
-    "typedoc": "^0.9.0",
-    "typedoc-format": "^1.0.21",
-    "typescript": "^2.6.2",
-    "yargs": "^10.1.1",
+    "typedoc": "^0.10.0",
+    "typedoc-format": "^1.0.22",
+    "typescript": "^2.7.1",
+    "yargs": "^11.0.0",
     "zip-i": "^1.0.45"
   },
   "devDependencies": {
     "@types/browserify": "^12.0.33",
-    "@types/chai": "^4.1.0",
+    "@types/chai": "^4.1.2",
     "@types/inquirer": "0.0.36",
-    "@types/mocha": "^2.2.46",
+    "@types/mocha": "^2.2.48",
     "@types/yargs": "^10.0.1",
     "chai": "^4.1.2",
-    "source-map-support": "^0.5.0"
+    "source-map-support": "^0.5.3"
   }
 }
