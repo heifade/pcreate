@@ -38,7 +38,6 @@ export async function readProjectConfig(configFileName: string) {
       reader.on("end", () => {
         fileContent = (fileContent || "").replace(/\r\n/g, "\n").trim();
 
-
         let start = fileContent.indexOf("\n");
         let end = fileContent.lastIndexOf("\n");
 
@@ -46,9 +45,7 @@ export async function readProjectConfig(configFileName: string) {
 
         let file = require(targetFile);
 
-
         let projectConfig = (file.default || file) as ProjectConfigModel;
-
 
         resolve(projectConfig);
         deleteFileSync(targetFile);

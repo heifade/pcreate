@@ -1,6 +1,6 @@
 {
   "name": "pcreate",
-  "version": "1.0.0-beta152",
+  "version": "1.0.0-beta153",
   "description": "",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -38,7 +38,7 @@
     "lodash": "^4.17.4",
     "mocha": "^5.0.0",
     "nyc": "^11.4.1",
-    "pcreate-config": "^1.1.2",
+    "pcreate-config": "^1.1.4",
     "shelljs": "^0.8.1",
     "ts-node": "^4.1.0",
     "tsify": "^3.0.4",
