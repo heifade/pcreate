@@ -59,12 +59,12 @@ export async function readProjectConfig(configFileName: string) {
         if (projectConfig.unitTest === undefined) {
           projectConfig.unitTest = false;
         }
-        if (projectConfig.compile instanceof CompileModel) {
-          initCompile(projectConfig.compile);
-        } else {
+        if (projectConfig.compile instanceof Array) {
           projectConfig.compile.map(m => {
             initCompile(m);
           });
+        } else {
+          initCompile(projectConfig.compile);
         }
 
         resolve(projectConfig);
