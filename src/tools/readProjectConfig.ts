@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as browserify from "browserify";
 import { saveFileUtf8Sync, deleteFileSync, existsSync } from "fs-i";
-import { ProjectConfigModel } from "pcreate-config";
+import { ProjectConfigModel, CompileModel } from "pcreate-config";
 let tsify = require("tsify");
 
 export async function readProjectConfig(configFileName: string) {
@@ -47,6 +47,26 @@ export async function readProjectConfig(configFileName: string) {
 
         let projectConfig = (file.default || file) as ProjectConfigModel;
 
+        if (projectConfig.sourceInclude === undefined) {
+          projectConfig.sourceInclude = ["./src/**/*"];
+        }
+        if (projectConfig.command === undefined) {
+          projectConfig.command = false;
+        }
+        if (projectConfig.documents === undefined) {
+          projectConfig.documents = false;
+        }
+        if (projectConfig.unitTest === undefined) {
+          projectConfig.unitTest = false;
+        }
+        if (projectConfig.compile instanceof CompileModel) {
+          initCompile(projectConfig.compile);
+        } else {
+          projectConfig.compile.map(m => {
+            initCompile(m);
+          });
+        }
+
         resolve(projectConfig);
         deleteFileSync(targetFile);
       });
@@ -57,4 +77,22 @@ export async function readProjectConfig(configFileName: string) {
       reject(e);
     }
   });
+}
+
+function initCompile(compile: CompileModel) {
+  if (compile.noImplicitAny === undefined) {
+    compile.noImplicitAny = true;
+  }
+  if (compile.sourceMap === undefined) {
+    compile.sourceMap = true;
+  }
+  if (compile.target === undefined) {
+    compile.target = "es5";
+  }
+  if (compile.declaration === undefined) {
+    compile.declaration = true;
+  }
+  if (compile.allowJs === undefined) {
+    compile.allowJs = false;
+  }
 }
