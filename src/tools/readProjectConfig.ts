@@ -12,23 +12,10 @@ export async function readProjectConfig(configFileName: string) {
 
     let targetFile = configFileName + Math.random() + ".js";
     try {
-      // browserify()
-      //   .add(configName)
-      //   .plugin("tsify", { noImplicitAny: true, target: "es6" })
-      //   .bundle()
-      //   .pipe(fileWriter)
-      //   .on("finish", () => {
-      //     let file = require(targetFile);
-
-      //     resolve(file);
-
-      //     unlinkSync(targetFile);
-      //   });
-
       // 没找到更好的方法，这里麻烦，需要将编译生成的js文件第一行与最后一行去除掉
       let reader = browserify()
         .add(configFileName)
-        .plugin(tsify, { noImplicitAny: true, target: "es6" })
+        .plugin(tsify, { noImplicitAny: false, target: "es6" })
         .bundle();
 
       let fileContent = "";
