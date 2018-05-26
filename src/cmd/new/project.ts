@@ -1,5 +1,6 @@
 import { Argv, Arguments } from "yargs";
 import { MainProj } from "./project/mainProj";
+import * as path from "path";
 
 export let command = "project";
 export let desc = "创建项目";
@@ -16,5 +17,11 @@ export let builder = (yargs: Argv) => {
 
 export let handler = async (yargs: any) => {
   let mainProj = new MainProj();
-  await mainProj.run(yargs.p || process.cwd());
+  let tpath: string;
+  if (yargs.p) {
+    tpath = path.resolve(yargs.p);
+  } else {
+    tpath = process.cwd();
+  }
+  await mainProj.run(tpath);
 };
