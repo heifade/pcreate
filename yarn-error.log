@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/10.2.1/bin/node /usr/local/bin/yarn start-new
+  /usr/local/Cellar/node/10.2.1/bin/node /usr/local/bin/yarn start
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -16,7 +16,7 @@ Platform:
 npm manifest: 
   {
     "name": "pcreate",
-    "version": "1.0.0-beta158",
+    "version": "1.0.0-beta159",
     "description": "",
     "main": "./es/index.js",
     "module": "./es/index.js",
@@ -35,7 +35,7 @@ npm manifest:
       "build": "npm run clean && npm run code-build && npm run docs",
       "test": "nyc mocha -t 5000",
       "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-      "start-new": "npm run build && node ./es/index.js new project",
+      "start-new": "npm run build && node ./es/index.js new project -p ..",
       "start-build": "npm run build && node ./es/index.js build -p ../code-backup"
     },
     "repository": {
@@ -62,7 +62,7 @@ npm manifest:
       "typedoc-format": "^1.0.22",
       "typescript": "^2.7.1",
       "yargs": "^11.0.0",
-      "zip-i": "^1.0.45"
+      "zip-i": "^1.0.47"
     },
     "devDependencies": {
       "@types/browserify": "^12.0.33",
@@ -288,7 +288,7 @@ Lockfile:
     version "5.5.3"
     resolved "http://registry.npm.taobao.org/acorn/download/acorn-5.5.3.tgz#f473dd47e0277a08e28e9bec5aeeb04751f0b8c9"
   
-  adm-zip@^0.4.7:
+  adm-zip@^0.4.11:
     version "0.4.11"
     resolved "http://registry.npm.taobao.org/adm-zip/download/adm-zip-0.4.11.tgz#2aa54c84c4b01a9d0fb89bb11982a51f13e3d62a"
   
@@ -3351,24 +3351,22 @@ Lockfile:
     version "2.0.0"
     resolved "http://registry.npm.taobao.org/yn/download/yn-2.0.0.tgz#e5adabc8acf408f6385fc76495684c88e6af689a"
   
-  zip-i@^1.0.45:
-    version "1.0.45"
-    resolved "http://registry.npm.taobao.org/zip-i/download/zip-i-1.0.45.tgz#f829c382f59d9abb44d511a3c11000e0634b4fef"
+  zip-i@^1.0.47:
+    version "1.0.47"
+    resolved "http://registry.npm.taobao.org/zip-i/download/zip-i-1.0.47.tgz#d9fefeb4253d82fb9392f290ea9485ea442ed4e5"
     dependencies:
-      adm-zip "^0.4.7"
+      adm-zip "^0.4.11"
       fs-i "^1.2.2"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 1
-  Command: sh
-  Arguments: -c npm run build && node ./es/index.js new project
-  Directory: /Volumes/RamDisk/temp/pcreate
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at ChildProcess.emit (events.js:182:13)
-      at maybeClose (internal/child_process.js:961:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:248:5)
+  Error: Command "start" not found.
+      at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:87307:17
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:95:12
+      at runCommand (/usr/local/lib/node_modules/yarn/lib/cli.js:87312:22)
+      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:87412:14)
